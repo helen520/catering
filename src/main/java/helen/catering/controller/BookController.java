@@ -44,7 +44,6 @@ public class BookController {
 			@RequestParam(value = "openId", defaultValue = "") String openId) {
 
 		UserAccount userAccount = null;
-
 		if (userId != 0) {
 			userAccount = _userService.getUserAccountById(userId);
 		} else if (!openId.equals("")) {
