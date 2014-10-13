@@ -47,7 +47,10 @@ function showDishView() {
 		dishPicker.refreshUI();
 	}
 	updateDishOrderInfo();
+	initkeyDown();
+}
 
+function initkeyDown() {
 	function keyDown(e) {
 		var keycode = event.keyCode;
 
@@ -57,6 +60,12 @@ function showDishView() {
 				alert("当前搜索菜品数量不为1,无法下单,请精确到1个菜!");
 				return;
 			}
+
+			if (dishes[0].soldOut) {
+				alert("当前菜品已沽清,无法下单!");
+				return;
+			}
+
 			dishView_DishSelectedCallback(dishes[0]);
 			dishPicker.clearSearchTextAndSetDefaultDishes();
 		}

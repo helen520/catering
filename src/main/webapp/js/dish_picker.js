@@ -188,6 +188,7 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 						showAlertDialog($.i18n.prop('string_xiTongTiShi'),
 								$.i18n.prop('string_caoZuoShiBai'));
 					}
+					initkeyDown();
 				}
 			});
 		});
