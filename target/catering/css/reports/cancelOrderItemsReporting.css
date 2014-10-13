@@ -1,0 +1,64 @@
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+body {
+	width: 800px;
+	margin: 0px auto;
+}
+
+.cancelOrderItemsReportingInfo {
+	text-align: center;
+}
+
+.cancelTime {
+	width: 100px;
+	padding: 5px 0px;
+	margin: 0px;
+	border: #CCC solid 1px;
+}
+
+.deskName {
+	width: 100px;
+	padding: 5px 0px;
+	margin: 0px;
+	border: #CCC solid 1px;
+}
+
+.dishOrderState {
+	width: 100px;
+	padding: 5px 0px;
+	border: #CCC solid 1px;
+}
+
+.dishName {
+	width: 100px;
+	padding: 5px 0px;
+	border: #CCC solid 1px;
+}
+
+.dishPrice {
+	width: 100px;
+	padding: 5px 0px;
+	border: #CCC solid 1px;
+}
+
+.amount {
+	width: 100px;
+	padding: 5px 0px;
+	border: #CCC solid 1px;
+}
+
+.cancelEmployeeAndCancelReason {
+	width: 150px;
+	padding: 5px 0px;
+	border: #CCC solid 1px;
+}

@@ -1,0 +1,750 @@
+@charset "utf-8";
+/* CSS Document */
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+body,html {
+	margin: 0;
+	padding: 0;
+	font: 16px normal "宋体";
+	color: black;
+}
+
+/* .ui-popup-window { */
+/* 	border: 0px; */
+/* 	background-color: rgb(50, 50, 50); */
+/* 	z-index: 999; */
+/* 	opacity: 0.3; */
+/* 	position: fixed; */
+/* 	display: none; */
+/* 	top: 0px; */
+/* 	left: 0px; */
+/* 	width: 100%; */
+/* 	height: 100%; */
+/* 	width: 100%; */
+/* } */
+.ui-radius {
+	border-radius: 0.75em;
+}
+
+.ui-shadow {
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+}
+
+.ui-input {
+	padding: .4em 5px;
+	margin: 0;
+	display: inline-block;
+	background: transparent none;
+	outline: 0 !important;
+	-webkit-appearance: none;
+	min-height: 1.4em;
+	line-height: 1.4em;
+	font-family: Helvetica, Arial, sans-serif;
+	color: #333;
+	text-shadow: 0 1px 0 #fff;
+	-webkit-rtl-ordering: logical;
+	-webkit-user-select: text;
+	cursor: auto;
+	letter-spacing: normal;
+	font: -webkit-small-control;
+	word-spacing: normal;
+	text-transform: none;
+	text-indent: 0px;
+	text-align: start;
+	-webkit-writing-mode: horizontal-tb;
+}
+
+.ui-border-solid {
+	border: 1px solid #CCC;
+}
+
+.button {
+	display: inline-block;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	padding: .5em 2em .55em;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+	-webkit-border-radius: .5em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+.button:hover {
+	text-decoration: none;
+}
+
+.button:active {
+	position: relative;
+	top: 1px;
+}
+
+.item:hover {
+	text-decoration: none;
+}
+
+.item:active {
+	position: relative;
+	top: 1px;
+}
+
+.color-red {
+	color: red;
+}
+
+.cancelFormDialogBtn {
+	position: fixed;
+	right: 2px;
+	top: 2px;
+	border-radius: 8em;
+	width: 1em;
+	text-align: center;
+	background-color: #B4B4B4;
+	padding: 3px;
+	display: block;
+	border: #CCC solid 1px;
+	z-index: 1111;
+}
+
+/**********  Control Menu ************/
+.controlMenuDialog {
+	position: fixed;
+	top: 15px;
+	left: 10px;
+	right: 10px;
+	bottom: 10px;
+	text-align: center;
+	background-color: #FFFFFF;
+}
+
+.controlMenuDialog .menuButton {
+	width: 8em;
+	height: 2.5em;
+	margin: 10px;
+	border-radius: .25em;
+	background-color: #FFAF60;
+}
+
+/********** dishMenuControlPanel *********/
+.dishMenuControlPanel {
+	background-color: #CCC;
+	z-index: 999;
+}
+
+.menuButton {
+	width: 7.5em;
+	height: 2.5em;
+	margin-left: 10px;
+	border-radius: .25em;
+	background-color: #FFAF60;
+	margin: 10px 0px 10px 10px;
+}
+/********** dishCategoryPanel *********/
+.dishCategoryPanel {
+	border: solid #CCC 1px;
+	background-color: #E0FFC1;
+	z-index: 999;
+	border: solid #CCC 1px;
+}
+
+.dishMenuPanel {
+	border: solid #CCC 1px;
+	background-color: #A6A653;
+	z-index: 999;
+}
+
+.dishCategoryItem {
+	margin: 2px;
+	height: 14px;
+	min-width: 5em;
+	padding: 0.8em 0.5em;
+	margin: 5px;
+	overflow: hidden;
+	text-align: center;
+	display: inline-block;
+	min-width: 5em;
+}
+
+.dishMenuItem {
+	margin: 2px;
+	min-width: 5em;
+	padding: 0.8em 0.5em;
+	margin: 5px;
+	overflow: hidden;
+	text-align: center;
+	background-color: #D990B3;
+	display: inline-block;
+}
+
+.selected-dish-menu {
+	background-color: #D9D0B3;
+}
+
+.selected-menu {
+	background-color: #DDE809;
+}
+
+.dish-category-background {
+	background-color: #D9D9B3;
+}
+
+.selected-dish-category-background {
+	background-color: #DDE809;
+}
+
+/********** dishList *********/
+.dishList {
+	background-color: beige;
+}
+
+.dishItem {
+	margin: 3px;
+	padding: 1em;
+	padding-top: 5px;
+	overflow: hidden;
+	text-align: center;
+	display: inline-block;
+}
+
+.dish-item-background {
+	min-width: 5em;
+	background-color: #9FD9FB;
+}
+
+.selected-dish-item-background {
+	background-color: #ACFFBB;
+}
+
+.formDialog {
+	position: fixed;
+	top: 12px;
+	left: 8px;
+	right: 8px;
+	bottom: 12px;
+	display: none;
+	background-color: #FFFFFF;
+	overflow: auto;
+}
+
+.bomLineDialog {
+	display: none;
+	background-color: #FCEDA4;
+	overflow: auto;
+}
+
+/********** add or edit dish *************/
+.addOrUpdateDishDialog {
+	position: fixed;
+	top: 12px;
+	left: 8px;
+	right: 8px;
+	bottom: 12px;
+	display: none;
+	background-color: #FFFFFF;
+}
+
+.addOrUpdateDishDialog .topCmdPanel {
+	text-align: center;
+	background: #D9FFA6;
+	border-radius: 0.75em 0.75em 0em 0em;
+}
+
+.addOrUpdateDishDialog .operationPanel {
+	text-align: center;
+}
+
+.addOrUpdateDishDialog .menuButton {
+	width: 6em;
+	height: 2.5em;
+	margin-left: 10px;
+	border-radius: .25em;
+	background-color: #FFAF60;
+	margin: 10px 0px 10px 10px;
+}
+
+.newDish {
+	position: absolute;
+	top: 60px;
+	left: 10px;
+	right: 5px;
+	bottom: 5px;
+	text-align: left;
+	overflow-y: scroll;
+}
+
+.cancel-add-dish {
+	position: absolute;
+	right: -3px;
+	top: -5px;
+	border-radius: 8em;
+	width: 1em;
+	text-align: center;
+	background-color: #B4B4B4;
+	padding: 3px;
+	display: block;
+	border: #CCC solid 1px;
+	z-index: 1111;
+}
+
+.image {
+	text-align: center;
+}
+
+.newDish .new-line {
+	line-height: 3em;
+}
+
+.newDish .type-ahead {
+	line-height: 3em;
+	display: inline-block;
+}
+
+.newDish .ui-input {
+	position: absolute;
+	left: 8em;
+	right: 2em;
+}
+
+.newDish .descriptionDiv {
+	height: 6em;
+}
+
+.newDish .prompt-message {
+	color: red;
+}
+
+.mealDealItem {
+	position: absolute;
+	top: 60px;
+	left: 10px;
+	right: 5px;
+	bottom: 5px;
+	text-align: left;
+	overflow-y: scroll;
+}
+
+#editDishTable th {
+	text-align: right;
+	width: 70px;
+	font-weight: normal;
+}
+
+#editDishTable td {
+	text-align: left;
+}
+
+#meal_deal_tab {
+	font-size: 14px;
+	max-width: 700px;
+}
+
+#meal_deal_tab td {
+	height: 40px;
+	padding-left: 5px;
+	min-width: 100px;
+}
+
+.ui_radius {
+	border-radius: 0.75em;
+}
+
+.ui-shadow {
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, .15);
+}
+
+.ui-border-solid {
+	border: 1px solid #CCC;
+}
+
+.ui-input,.input {
+	padding: .4em 5px;
+	margin: 0;
+	display: inline-block;
+	background: transparent none;
+	outline: 0 !important;
+	-webkit-appearance: none;
+	min-height: 1.4em;
+	line-height: 1.4em;
+	font-family: Helvetica, Arial, sans-serif;
+	color: #333;
+	text-shadow: 0 1px 0 #fff;
+	-webkit-rtl-ordering: logical;
+	-webkit-user-select: text;
+	cursor: auto;
+	letter-spacing: normal;
+	font: -webkit-small-control;
+	word-spacing: normal;
+	text-transform: none;
+	text-indent: 0px;
+	text-align: start;
+	-webkit-writing-mode: horizontal-tb;
+}
+
+.input {
+	width: 80px;
+}
+
+.dishname {
+	width: 70%;
+}
+
+.mealdealname {
+	width: 100px;
+}
+
+.selectDishName {
+	display: none;
+	width: 80%;
+}
+
+.groupname {
+	width: 80px;
+}
+
+.sort {
+	width: 30px;
+}
+
+.operatetr {
+	width: 60px;
+	text-align: center;
+	margin: 10px 0px;
+}
+/*mealdealitem end*/
+
+/*========== dish tag info ============*/
+.addOrUpdateDishDialog .dishTagInfo {
+	position: absolute;
+	top: 70px;
+	left: 10px;
+	right: 5px;
+	bottom: 5px;
+	text-align: left;
+	overflow-y: scroll;
+}
+
+.addOrUpdateDishDialog .dishTagItemList {
+	margin: 3px;
+	padding: 1em;
+	padding-top: 5px;
+	overflow: hidden;
+	text-align: center;
+	display: inline-block;
+}
+
+.dishTagItem {
+	padding: 10px;
+	min-width: 5em;
+	margin-bottom: 10px;
+	background: #EAEAEA;
+}
+
+.selected-dishTag-item-background {
+	background-color: #DDE809;
+}
+/**************** show DishTag *************/
+.dishTagDialog {
+	position: fixed;
+	top: 12px;
+	left: 8px;
+	right: 8px;
+	bottom: 12px;
+	display: none;
+	background-color: #FFFFFF;
+}
+
+.operationPanel {
+	padding: 10px;
+	text-align: center;
+}
+
+.dishTagDialog .menuButton {
+	width: 7em;
+	height: 2.5em;
+	margin-left: 10px;
+	border-radius: .25em;
+	background-color: #FFAF60;
+	margin: 10px 0px 10px 10px;
+}
+
+.dishTagDialog .dishTagInfo {
+	position: absolute;
+	top: 70px;
+	left: 10px;
+	right: 5px;
+	bottom: 5px;
+	text-align: left;
+	overflow-y: scroll;
+}
+
+.dishTagDialog .dishTagItemList {
+	padding: 10px;
+}
+
+.dishTagDialog .dishTagItem {
+	position: relative;
+	padding: 10px;
+	background: #EAEAEA;
+	margin-bottom: 10px;
+}
+
+.dishTagDialog .cancel {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	border-radius: 8em;
+	width: 1em;
+	text-align: center;
+	background-color: #B4B4B4;
+	padding: 3px;
+	display: block;
+	border: #CCC solid 1px;
+}
+
+/**************** add dishTag **************/
+.addDishTagDialog {
+	position: fixed;
+	top: 15px;
+	left: 10px;
+	right: 10px;
+	bottom: 10px;
+	display: none;
+	background-color: #FFFFFF;
+}
+
+.container {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	right: 0px;
+	bottom: 10px;
+	overflow-y: scroll;
+}
+
+.newDishTag,.title {
+	display: none;
+}
+
+.addDishTagDialog .operationPanel {
+	padding: 10px;
+	line-height: 1.5em;
+}
+
+.addDishTagDialog .addDishTagForm {
+	padding: 10px;
+	background-color: #EAEAEA;
+}
+
+.addDishTagDialog .menuButton {
+	width: 5em;
+	height: 2.5em;
+	margin-left: 10px;
+	border-radius: .25em;
+	background-color: #FFAF60;
+}
+
+.addDishTagDialog .dishTagItemList {
+	padding: 10px;
+}
+
+.addDishTagDialog .dishTagItem {
+	padding: 10px;
+	background: #EAEAEA;
+	margin-bottom: 10px;
+}
+
+.cancel-add-dish-tag {
+	position: absolute;
+	right: -3px;
+	top: -5px;
+	border-radius: 8em;
+	width: 1em;
+	text-align: center;
+	background-color: #B4B4B4;
+	padding: 3px;
+	display: block;
+	border: #CCC solid 1px;
+	z-index: 1111;
+}
+
+/************* sold out*************/
+.editDishToSoldOut {
+	padding: 20px;
+}
+
+.editDishToSoldOut .list_row {
+	display: table-row;
+	overflow: hidden;
+	width: 100%;
+}
+
+.editDishToSoldOut .list_cell {
+	display: table-cell;
+	*float: left;
+	padding: 0.5%;
+	vertical-align: middle;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.editDishToSoldOut .caption {
+	background-color: #D9D9D9;
+	border: #DEDEDE solid 1px;
+}
+
+.editDishToSoldOut .list_cell_right {
+	border: #FFF solid 3px;
+	border-right: 0px;
+	padding: 0px;
+}
+
+.editDishToSoldOut .operatePanel {
+	background-color: #f5f5f5;
+}
+
+.editDishToSoldOut .button {
+	width: 7.5em;
+	height: 2.5em;
+	border-radius: .25em;
+	color: #FFF;
+	background-color: #FFB76F;
+}
+
+.editDishToSoldOut .disabledButton {
+	background-color: #CCC;
+}
+
+.editDishToSoldOut .messageDiv {
+	height: 2em;
+	padding-top: 0.8em;
+}
+
+.editDishToSoldOut .dishCategoryName {
+	background-color: #E7E7E7;
+	border: #FFF solid 3px;
+	border-left: 0px;
+	border-right: 0px;
+	min-width: 5em;
+}
+
+.editDishToSoldOut .dishName {
+	background-color: #f5f5f5;
+	min-width: 6em;
+}
+
+.editDishToSoldOut .soldOut {
+	background-color: #FFE7CE;
+	min-width: 3em;
+}
+
+.editDishToSoldOut .remain {
+	background-color: #f5f5f5;
+}
+
+.editDishToSoldOut .limitPerDay {
+	background-color: #FFE7CE;
+}
+
+.editDishToSoldOut .grayBorderBottom {
+	border-bottom: #CCC dashed 1px;
+}
+
+.deskItem {
+	background-color: #FFE7CE;
+	margin: 3px;
+}
+
+.selected-desk {
+	background-color: #f5f5f5;
+}
+
+.item {
+	display: inline-block;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	padding: .5em 2em .55em;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+	-webkit-border-radius: .5em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	background-color: #FFE7CE;
+	margin: 3px;
+}
+
+.selected {
+	background-color: #f5f5f5;
+}
+
+.uploadifyDiv {
+	z-index: 1004;
+	position: fixed;
+	top: 3em;
+	right: 2em;
+}
+
+.autoComplete,.autoCompleteMaterial {
+	margin: 8px;
+	position: relative;
+	float: left;
+}
+
+.autoComplete ul,.autoCompleteMaterial  ul {
+	padding: 0px;
+	margin: 0px;
+	border: 1px #333 solid;
+	width: 200px;
+	background: white;
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 28px;
+	*margin-left: 9px;
+	*margin-top: 2px;
+	margin-top: 1px\0;
+	z-index: 9999;
+}
+
+.autoComplete li,.autoCompleteMaterial  li {
+	list-style: none;
+}
+
+.autoComplete li a,.autoCompleteMaterial  li a {
+	display: block;
+	color: #000;
+	text-decoration: none;
+	padding: 1px 0 1px 5px;
+	_width: 97%;
+	z-index: 9999;
+}
+
+.autoComplete li a:hover,.autoCompleteMaterial  li a:hover {
+	color: #000;
+	background: #ccc;
+	border: none;
+	z-index: 9999;
+}

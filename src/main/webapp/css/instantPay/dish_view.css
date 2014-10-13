@@ -1,0 +1,86 @@
+@CHARSET "UTF-8";
+
+#dishViewLeft {
+	position: fixed;
+	top: 0em;
+	left: 0em;
+	right: 20.6em;
+	bottom: 6.3em;
+}
+
+#dishViewBottomLeft {
+	position: fixed;
+	left: 0px;
+	right: 20em;
+	bottom: 0em;
+	padding: 0.3em 0.2em 0.5em 0.2em;
+	background-color: #D9D9B3;
+}
+
+#dishViewRight {
+	position: fixed;
+	top: 0em;
+	right: 0em;
+	bottom: 0em;
+	width: 20em;
+	padding-top: 0.8em;
+	background-color: #EEE;
+}
+
+#loginInfoDiv {
+	position: fixed;	
+	right: 0em;
+	bottom: 0em;
+	width: 19em;	
+	height: 2.6em;
+	padding: 0.5em 0.2em 0.2em 0.8em;
+	background-color: #D9D9B3;
+}
+
+#dishPickerBoxTopLeft {
+	background-color: #EEE;
+}
+
+.dishPickerBoxTopRight {
+	position: absolute;
+	top: 0em;
+	right: 20em;
+	width: 15.3em;
+}
+
+#dishViewRight #dishOrderItemCmdPanel {
+	text-align: center;
+	position: fixed;
+	padding: 0.3em 0em 0.3em 0em;
+	top: 0em;
+	right: 0em;
+	width: 20em;
+	min-height: 2em;
+	background-color: #D9D9B3;
+}
+
+#dishViewRight #dishOrderItemList {
+	position: fixed;
+	top: 2.8em;
+	right: 0em;
+	width: 20em;
+	bottom: 3.5em;
+}
+
+#dishViewBottomLeft #leftCmdButtonContainer {
+	width: 50%;
+	float: left;
+	text-align: left;
+}
+
+#dishViewBottomLeft #centerCmdButtonContainer {
+	width: 35%;
+	float: left;
+	text-align: center;
+}
+
+#dishViewBottomLeft #rightCmdButtonContainer {
+	width: 15%;
+	float: right;
+	text-align: right;
+}

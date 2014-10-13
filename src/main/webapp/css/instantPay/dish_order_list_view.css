@@ -1,0 +1,46 @@
+.topPanel {
+	padding: 0.3em 0em 0.3em 0em;
+	border-bottom: #CCC solid 1px;
+	background-color: #D9D9B3;
+}
+
+.searchDishOrdreIdInput {
+	width: 10em;
+	margin-left: 10em;
+}
+
+#dishOrderListViewBottom {
+	position: fixed;
+	left: 0px;
+	right: 0em;
+	bottom: 0em;
+	padding: 0.3em 0.2em 0.5em 0.2em;
+	background-color: #D9D9B3;
+}
+
+.dishOrderListPanel {
+	position: absolute;
+	top: 2.5em;
+	right: 0em;
+	left: 0em;
+	bottom: 5em;
+	padding: 1em .3em;
+}
+
+.dishOrderListPanel .captionPanel {
+	padding: 0.2em 7.5em 0.2em 1em;
+	background-color: #CCFFCC;
+}
+
+.dishOrderListPanel .dishOrderItemListPanel {
+	padding: 0.2em;
+	min-height: 1em;
+	background-color: #EEE;
+}
+
+.dishOrderListPanel .orderItem {
+	margin: 0.1em;
+	display: inline-block;
+	text-align: left;
+	background-color: #CCC;
+}

@@ -1,0 +1,99 @@
+.dishPicker .dishCategorySelector {
+	padding: 0.3em;
+	background-color: #B3D4FF;
+}
+
+.dishPicker .dishSelector {
+	margin: 3px 0px;
+	top: 3em;
+	button: 0px;
+	padding: 0.3em;
+}
+
+.dishPicker #filterDiv {
+	text-align: center;
+	padding: 0.3em 0em 0.3em 0em;
+	left: 0em;
+	top: 0em;
+	right: 0em;
+	height: 2.2em;
+	min-width: 22em;
+	background-color: #D9D9B3;
+}
+
+.dishPicker .menuButton {
+	/* 	margin: 2px; */
+	/* 	vertical-align: middle; */
+	/* 	padding: 0.3em; */
+	/* 	min-width: 4em; */
+	/* 	min-height: 2em; */
+	/* 	line-height: 2em; */
+	/* 	background-color: #B5EA15 */
+	font-size: 1.2em;
+	margin: 2px;
+	display: inline-block;
+	padding: 0.3em;
+	background-color: #6AA1D8;
+}
+
+/* .dishPicker .dishCategoryButton { */
+/* 	margin: 2px; */
+/* 	color: #2F2F2; */
+/* 	vertical-align: middle; */
+/* 	padding: 0.3em; */
+/* 	min-width: 4em; */
+/* 	min-height: 2em; */
+/* 	line-height: 2em; */
+/* } */
+.dishPicker .dishCategoryButton {
+	font-size: 1em;
+	display: inline-block;
+	margin: 2px;
+	text-align: center;
+	vertical-align: middle;
+	padding: 0.3em;
+	background-color: #CCC;
+}
+
+.dishPicker .dishCategoryButtonSelected {
+	background-color: #EBEBEB;
+	font-weight: bolder;
+}
+
+.dishPicker .dishButton {
+	margin: 2px;
+	line-height: 1.5em;
+	font-size: 0.8em;
+	width: 6em;
+	height: 5em;
+	float: left;
+	padding: 0.5em;
+	background-color: #AAFFAA;
+	border: #EEE solid 1px;
+	border-bottom: none;
+	border-right: none;
+	position: relative;
+}
+
+.dishPicker .dishButton .dishPrice {
+	color: #922C09;
+}
+
+.dishPicker .dishButton span {
+	right: 0.6em;
+	bottom: 0.6em;
+	height: 1.3em;
+	width: 1.3em;
+	text-align: center;
+	background-color: #FFCEB0;
+	border-radius: 5px;
+	font-size: 0.8em;
+	float: right;
+	font-weight: normal;
+	position: absolute;
+}
+
+/*预留样式*/
+.dishPicker .dishButton .dishName {
+	font-weight: bold;
+}

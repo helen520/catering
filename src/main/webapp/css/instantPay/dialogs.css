@@ -1,0 +1,105 @@
+.amountDialog {
+	position: fixed;
+	background-color: #FFFFFF;
+	border-radius: 0.75em 0.75em 0.75em 0.75em;
+}
+
+.confirmDialog {
+	width: 90%;
+	max-width: 20em;
+	background-color: #FFF;
+	border-radius: 0.75em;
+}
+
+.confirmDialogTitle {
+	background: #D9D9B3;
+	font: 1.2em/1 'Cuprum', 'Lucida Sans Unicode', 'Lucida Grande',
+		sans-serif;
+	padding: 16px 20px;
+	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+	border-radius: 0.75em 0.75em 0em 0em;
+}
+
+.confirmDialogMessage {
+	font: 1em/1 'Cuprum', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+	padding: 16px 20px;
+	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.6);
+	color: #666;
+}
+
+.dialogButton {
+	color: #FFF;
+	width: 5em;
+	height: 1.8em;
+	text-align: center;
+	font-weight: bold;
+	margin: 0.3em;
+	padding: 0.1em;
+	padding-top: .6em;
+	display: inline-block;
+	border-radius: 0px;
+	background-color: #F63;
+	border: 1px solid #ebebeb;
+	font-weight: bold;
+}
+
+.operationDiv {
+	margin: 10px auto 16px auto;
+	width: 12em;
+}
+
+.alertButton {
+	color: #FFF;
+	width: 5em;
+	height: 2em;
+	text-align: center;
+	font-weight: bold;
+	margin: 10px auto 16px auto;
+	padding: 0.1em;
+	display: block;
+	border-radius: 0px;
+	background-color: #F63;
+	font-weight: bold;
+	border: 1px solid #ebebeb;
+}
+
+.searchInputDailog {
+	position: fixed;
+	bottom: 3.4em;
+	right: .1em;
+}
+
+.searchButton {
+	color: #FFFFFF;
+	width: 3.5em;
+	height: 3em;
+	text-align: center;
+	padding: 0.1em;
+	display: block;
+	display: inline-block;
+	background-color: #999;
+	font-weight: bold;
+	border: 1px solid #ebebeb;
+	border-radius: 0px;
+	font-weight: bold;
+}
+
+.loadingDialog {
+	display: block;
+	padding: 1em;
+	background-color: #F63;
+	z-index: 9999;
+}
+
+.shiftClassDialog {
+	position: fixed;
+	top: 5em;
+	left: 2em;
+	right: 2em;
+	bottom: 5em;
+	text-align: center;
+	padding: .5em;
+	background-color: #FFF;
+	border-radius: 0.75em;
+	display: none;
+}

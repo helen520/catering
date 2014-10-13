@@ -1,0 +1,8 @@
+* {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+}
+
+input {
+	-webkit-user-select: auto;
+}
