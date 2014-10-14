@@ -265,8 +265,8 @@ function dishOrderListButtonClick() {
 	}
 
 	function restoreDishOrder(dishOrderId, dishOrderDivIndex) {
-		if (!$storeData.employee.canRestoreDishOrder
-				&& ($templeEmployee && !$templeEmployee.canRestoreDishOrder)) {
+		if (!$storeData.employee.canRestoreDishOrder && $templeEmployee
+				&& !$templeEmployee.canRestoreDishOrder) {
 			showAlertDialog("错误", "权限不足，不能执行当前操作");
 			return;
 		}

@@ -56,6 +56,9 @@ public class Employee implements Serializable {
 	@Column
 	private boolean canViewReport;
 
+	@Column
+	private boolean canCancelDishSoldOut;
+
 	@Transient
 	private String loginNo;
 
@@ -169,6 +172,14 @@ public class Employee implements Serializable {
 
 	public void setCanViewReport(boolean canViewReport) {
 		this.canViewReport = canViewReport;
+	}
+
+	public boolean getCanCancelDishSoldOut() {
+		return canCancelDishSoldOut;
+	}
+
+	public void setCanCancelDishSoldOut(boolean canCancelDishSoldOut) {
+		this.canCancelDishSoldOut = canCancelDishSoldOut;
 	}
 
 	public String getLoginNo() {

@@ -232,8 +232,11 @@
 					<li><label>可取消菜品</label> <input
 						id="employeeCanCancelOrderItem" type="checkbox" /></li>
 					<br />
-					<li><label>可取查看报表</label> <input
-						id="employeeCanViewReport" type="checkbox" /></li>
+					<li><label>可取查看报表</label> <input id="employeeCanViewReport"
+						type="checkbox" /></li>
+					<br />
+					<li><label>可恢复菜品销售</label> <input
+						id="employeeCanCancelDishSoldOut" type="checkbox" /></li>
 				</ul>
 			</div>
 		</form>

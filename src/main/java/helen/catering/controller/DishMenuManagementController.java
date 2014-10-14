@@ -412,9 +412,10 @@ public class DishMenuManagementController {
 
 	@ResponseBody
 	@RequestMapping("cancelDishSoldOut")
-	public String cancelDishSoldOut(@RequestParam long dishId,
-			@RequestParam long employeeId) {
-		return this._menuManagingService.cancelDishSoldOut(dishId, employeeId);
+	public Dish cancelDishSoldOut(@RequestParam long dishId,
+			@RequestParam long employeeId) throws Exception {
+		_userService.AssertEmployeeAuth(employeeId);
+		return this._menuManagingService.cancelDishSoldOut(dishId);
 	}
 
 	@ResponseBody
@@ -534,10 +535,11 @@ public class DishMenuManagementController {
 			@RequestParam(defaultValue = "false") boolean canRestoreDishOrder,
 			@RequestParam(defaultValue = "false") boolean canPreprintCheckoutNote,
 			@RequestParam(defaultValue = "false") boolean canCancelOrderItem,
-			@RequestParam(defaultValue = "false") boolean canViewReport) {
+			@RequestParam(defaultValue = "false") boolean canViewReport,
+			@RequestParam(defaultValue = "false") boolean canCancelDishSoldOut) {
 		return this._menuManagingService.updateEmployee(id, name, workNumber,
 				smartCardNo, canRestoreDishOrder, canPreprintCheckoutNote,
-				canCancelOrderItem, canViewReport);
+				canCancelOrderItem, canViewReport, canCancelDishSoldOut);
 	}
 
 	@ResponseBody

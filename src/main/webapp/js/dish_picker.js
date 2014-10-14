@@ -164,7 +164,14 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 	}
 
 	function cancelDishSoldOutCallback(dishId) {
-		showEmployeeLoginDialog(function() {
+		showEmployeeLoginDialog(cancelDishSoldOut, null, null, true);
+		function cancelDishSoldOut() {
+			if (!$storeData.employee.canCancelDishSoldOut && $templeEmployee
+					&& !$templeEmployee.canCancelDishSoldOut) {
+				showAlertDialog($.i18n.prop('string_cuoWu'), "权限不足!无法进行操作!");
+				return;
+			}
+
 			$.ajax({
 				type : 'POST',
 				url : "../admin/cancelDishSoldOut",
@@ -175,23 +182,15 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 				dataType : 'text',
 				error : function(error) {
 				},
-				success : function(cancelDishSoldOutMsg) {
-					if (cancelDishSoldOutMsg == "quXiaoChengGong") {
-						showAlertDialog($.i18n.prop('string_xiTongTiShi'),
-								$.i18n.prop('string_caoZuoChengGong'));
-						$dishMap[dishId].soldOut = false;
-						renderDishes();
-					} else if (cancelDishSoldOutMsg == "quanXianBuZu") {
-						showAlertDialog($.i18n.prop('string_xiTongTiShi'),
-								$.i18n.prop('string_quanXianBuZu'));
-					} else {
-						showAlertDialog($.i18n.prop('string_xiTongTiShi'),
-								$.i18n.prop('string_caoZuoShiBai'));
-					}
+				success : function(dish) {
+					showAlertDialog($.i18n.prop('string_xiTongTiShi'), $.i18n
+							.prop('string_caoZuoChengGong'));
+					$dishMap[dishId].soldOut = false;
+					renderDishes();
 					initkeyDown();
 				}
 			});
-		});
+		}
 	}
 
 	function menuButtonClick() {

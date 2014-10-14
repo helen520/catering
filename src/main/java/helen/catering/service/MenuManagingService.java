@@ -200,20 +200,14 @@ public class MenuManagingService {
 		return this._dishDao.updateDishList(updateDishList);
 	}
 
-	public String cancelDishSoldOut(long dishId, long employeeId) {
+	public Dish cancelDishSoldOut(long dishId) {
 		try {
-			if (this._userInRoleDao.employeeHasRole(employeeId, "ROLE_ADMIN")) {
-				Dish dish = this._dishDao.getDishById(dishId);
-				dish.setSoldOut(false);
-				this._dishDao.save(dish);
-				return "quXiaoChengGong";
-			} else {
-				return "quanXianBuZu";
-			}
+			Dish dish = this._dishDao.getDishById(dishId);
+			dish.setSoldOut(false);
+			return this._dishDao.save(dish);
 		} catch (Exception e) {
-			e.printStackTrace();
+			return null;
 		}
-		return "caoZuoShiBai";
 	}
 
 	public boolean deleteDish(long dishId) {
@@ -507,7 +501,7 @@ public class MenuManagingService {
 	public Employee updateEmployee(long id, String name, String workNumber,
 			String smartCardNo, boolean canRestoreDishOrder,
 			boolean canPreprintCheckoutNote, boolean canCancelOrderItem,
-			boolean canViewReport) {
+			boolean canViewReport, boolean canCancelDishSoldOut) {
 		try {
 			Employee employee = _employeeDao.find(id);
 			employee.setName(name);
@@ -517,6 +511,7 @@ public class MenuManagingService {
 			employee.setCanPreprintCheckoutNote(canPreprintCheckoutNote);
 			employee.setCanCancelOrderItem(canCancelOrderItem);
 			employee.setCanViewReport(canViewReport);
+			employee.setCanCancelDishSoldOut(canCancelDishSoldOut);
 			_employeeDao.save(employee);
 			return employee;
 		} catch (Exception e) {

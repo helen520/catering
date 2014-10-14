@@ -274,7 +274,7 @@ function OrderItemList(bindingDishId, cmdButtonContainer, listContainer,
 		}
 		function cancelSubmittedOrderItem() {
 			if ($storeData.employee.canCancelOrderItem
-					|| ($templeEmployee && !$templeEmployee.canRestoreDishOrder)) {
+					|| ($templeEmployee && $templeEmployee.canRestoreDishOrder)) {
 				if (orderItem.amount > 1) {
 					showAmountDialog("选择删除数量", cancelResionDailog,
 							orderItem.amount);

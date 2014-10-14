@@ -742,6 +742,8 @@ $(function() {
 							$curEmployee.canCancelOrderItem);
 					$("#employeeCanViewReport").prop("checked",
 							$curEmployee.canViewReport);
+					$("#employeeCanCancelDishSoldOut").prop("checked",
+							$curEmployee.canCancelDishSoldOut);
 
 					showFormDialog("#addOrUpdateEmployeeDialogTemplate",
 							submitEmployee);
@@ -3328,6 +3330,7 @@ function submitEmployee() {
 	var canPreprintCheckoutNote = this.form.employeeCanPreprintCheckoutNote.checked;
 	var canCancelOrderItem = this.form.employeeCanCancelOrderItem.checked;
 	var canViewReport = this.form.employeeCanViewReport.checked;
+	var canCancelDishSoldOut = this.form.employeeCanCancelDishSoldOut.checked;
 
 	$.ajax({
 		type : 'POST',
@@ -3341,7 +3344,8 @@ function submitEmployee() {
 			canRestoreDishOrder : canRestoreDishOrder,
 			canPreprintCheckoutNote : canPreprintCheckoutNote,
 			canCancelOrderItem : canCancelOrderItem,
-			canViewReport : canViewReport
+			canViewReport : canViewReport,
+			canCancelDishSoldOut : canCancelDishSoldOut
 		},
 		dataType : "json",
 		async : false,
