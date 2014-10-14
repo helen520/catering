@@ -3,7 +3,6 @@ package helen.catering.controller;
 import helen.catering.model.FinanceStat;
 import helen.catering.model.entities.Coupon;
 import helen.catering.model.entities.DishOrder;
-import helen.catering.model.entities.Employee;
 import helen.catering.model.entities.PayRecord;
 import helen.catering.model.entities.UserAccount;
 import helen.catering.service.BalanceOperationLogService;
@@ -159,12 +158,8 @@ public class OrderingController {
 			@RequestParam double amount, @RequestParam String cancelReason,
 			@RequestParam boolean dishSoldOut) throws Exception {
 		_userService.AssertEmployeeAuth(employeeId);
-		Employee employee = _userService.getEmployeeById(employeeId);
 
-		if (!employee.getCanCancelOrderItem())
-			throw new ServiceException(ServiceException.NOT_AUTHORUTY);
-
-		DishOrder result = _orderingService.cancelOrderItem(employee,
+		DishOrder result = _orderingService.cancelOrderItem(employeeId,
 				dishOrderId, orderItemId, amount, cancelReason, dishSoldOut);
 		_operationLogService.cancelOrderItem(employeeId, result, orderItemId,
 				cancelReason, amount);
@@ -237,12 +232,6 @@ public class OrderingController {
 	public boolean restoreDishOrder(@RequestParam long dishOrderId,
 			@RequestParam long employeeId) throws Exception {
 		_userService.AssertEmployeeAuth(employeeId);
-
-		Employee employee = _userService.getEmployeeById(employeeId);
-
-		if (!employee.getCanRestoreDishOrder()) {
-			throw new ServiceException(ServiceException.NOT_AUTHORUTY);
-		}
 
 		DishOrder dishOrder = _orderingService.getDishOrderById(dishOrderId);
 		StringWriter dishOrderJson = new StringWriter();
@@ -364,7 +353,7 @@ public class OrderingController {
 	}
 
 	@ResponseBody
-	@RequestMapping("changeDiscountRateOrServiceFeeRate")
+	@RequestMapping("loadMyDishOrders")
 	public List<DishOrder> loadMyDishOrders(@RequestParam long employeeId)
 			throws Exception {
 		_userService.AssertEmployeeAuth(employeeId);

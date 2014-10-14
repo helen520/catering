@@ -533,10 +533,11 @@ public class OrderingService {
 		return dishOrder;
 	}
 
-	public DishOrder cancelOrderItem(Employee employee, long dishOrderId,
+	public DishOrder cancelOrderItem(long employeeId, long dishOrderId,
 			long orderItemId, double amount, String cancelReason,
 			boolean dishSoldOut) throws Exception {
 
+		Employee employee = _employeeDao.find(employeeId);
 		DishOrder dishOrder = _dishOrderDao.getDishOrderById(dishOrderId);
 		OrderItem orderItemToCancel = null;
 		for (OrderItem orderItem : dishOrder.getOrderItems()) {

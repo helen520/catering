@@ -242,7 +242,11 @@ function OrderItemList(bindingDishId, cmdButtonContainer, listContainer,
 		}
 		function cancelButtonClick() {
 			if (orderItem.state != ORDER_ITEM_STATE.WAITING) {
-				cancelSubmittedOrderItem();
+				if ($isDesktop && !$storeData.employee.canCancelOrderItem) {
+					showEmployeeLoginDialog(cancelSubmittedOrderItem, null,
+							null, true);
+				} else
+					cancelSubmittedOrderItem();
 			} else {
 				var oiIndex = $curDishOrder.orderItems.indexOf(orderItem);
 				if (oiIndex > -1) {
@@ -269,11 +273,16 @@ function OrderItemList(bindingDishId, cmdButtonContainer, listContainer,
 			}
 		}
 		function cancelSubmittedOrderItem() {
-			if (orderItem.amount > 1) {
-				showAmountDialog("选择删除数量", cancelResionDailog, orderItem.amount);
-			} else {
-				cancelResionDailog(1);
-			}
+			if ($storeData.employee.canCancelOrderItem
+					|| ($templeEmployee && !$templeEmployee.canRestoreDishOrder)) {
+				if (orderItem.amount > 1) {
+					showAmountDialog("选择删除数量", cancelResionDailog,
+							orderItem.amount);
+				} else {
+					cancelResionDailog(1);
+				}
+			} else
+				showAlertDialog($.i18n.prop('string_cuoWu'), "权限不足!无法进行操作!");
 		}
 
 		function cancelResionDailog(amount) {

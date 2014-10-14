@@ -75,12 +75,12 @@ function dishOrderListButtonClick() {
 							alert($.i18n
 									.prop('string_dingDanSuoZaiDeZhuoZiWeiMaiDanBuNengHuiFuDingDan'));
 						} else {
-							if ($isDesktop && $needEmployeeCheck)
-								showEmployeeLoginDialog(restoreDishOrder,
-										dishOrder.id, dishOrderDivIndex);
-							else
+							if ($storeData.employee.canRestoreDishOrder)
 								restoreDishOrder(dishOrder.id,
 										dishOrderDivIndex);
+							else
+								showEmployeeLoginDialog(restoreDishOrder,
+										dishOrder.id, dishOrderDivIndex, true);
 						}
 					});
 
@@ -155,7 +155,8 @@ function dishOrderListButtonClick() {
 	}
 
 	function restoreDishOrder(dishOrderId, dishOrderDivIndex) {
-		if (!$storeData.employee.canRestoreDishOrder) {
+		if (!$storeData.employee.canRestoreDishOrder
+				&& !$templeEmployee.canRestoreDishOrder) {
 			showAlertDialog("错误", "权限不足，不能执行当前操作");
 			return;
 		}

@@ -1,6 +1,7 @@
 var $isEditing = false;
 var $isDesktop = false;
 var $needEmployeeCheck = false;
+var $templeEmployee = null;
 
 function StringBuilder() {
 	var _string = new Array();
@@ -99,10 +100,9 @@ function switchToView(toView) {
 }
 
 function loadProperties() {
-	jQuery.i18n
-			.properties({
-				name : 'strings', // 资源文件名称
-				path : '../resources/i18n/', // 资源文件路径
-				mode : 'map', // 用Map的方式使用资源文件中的值
-			});
+	jQuery.i18n.properties({
+		name : 'strings', // 资源文件名称
+		path : '../resources/i18n/', // 资源文件路径
+		mode : 'map', // 用Map的方式使用资源文件中的值
+	});
 }

@@ -1,6 +1,7 @@
 var $isEditing = false;
 var $isDesktop = true;
 var $needEmployeeCheck = true;
+var $templeEmployee = null;
 
 function StringBuilder() {
 	var _string = new Array();

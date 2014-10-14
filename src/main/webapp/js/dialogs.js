@@ -69,7 +69,7 @@ function showDishAmountDialog(title, orderItem, okCallback, cancelCallback) {
 
 var smartCardNo;
 var isShowedEmployeeLoginDialog = false;
-function showEmployeeLoginDialog(okCallback, arg1, arg2) {
+function showEmployeeLoginDialog(okCallback, arg1, arg2, isAuthority) {
 	var dialogDiv = $("<div>").addClass("amountDialog").appendTo('body');
 	var workNumberKb = $("<div>").addClass("floatLeft").appendTo(dialogDiv)
 			.digitKeyboard($.i18n.prop('string_gongHao') + ": ");
@@ -125,7 +125,10 @@ function showEmployeeLoginDialog(okCallback, arg1, arg2) {
 						smartCardNo = "";
 					},
 					success : function(employee) {
-						$storeData.employee = employee;
+						if (isAuthority) {
+							$templeEmployee = employee;
+						} else
+							$storeData.employee = employee;
 						hideLoadingDialog();
 						document.onkeydown = null;
 						modal.close();

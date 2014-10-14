@@ -108,9 +108,14 @@ function dishOrderListButtonClick() {
 									.prop('string_dingDanSuoZaiDeZhuoZiWeiMaiDanBuNengHuiFuDingDan'));
 						} else {
 							if (!isShowedEmployeeLoginDialog) {
-								if ($isDesktop && $needEmployeeCheck)
-									showEmployeeLoginDialog(restoreDishOrder,
-											dishOrder.id, dishOrderDivIndex);
+								if ($isDesktop)
+									if ($storeData.employee.canRestoreDishOrder)
+										restoreDishOrder(dishOrder.id,
+												dishOrderDivIndex);
+									else
+										showEmployeeLoginDialog(
+												restoreDishOrder, dishOrder.id,
+												dishOrderDivIndex, true);
 								else
 									restoreDishOrder(dishOrder.id,
 											dishOrderDivIndex);
@@ -260,7 +265,8 @@ function dishOrderListButtonClick() {
 	}
 
 	function restoreDishOrder(dishOrderId, dishOrderDivIndex) {
-		if (!$storeData.employee.canRestoreDishOrder) {
+		if (!$storeData.employee.canRestoreDishOrder
+				&& ($templeEmployee && !$templeEmployee.canRestoreDishOrder)) {
 			showAlertDialog("错误", "权限不足，不能执行当前操作");
 			return;
 		}
