@@ -282,39 +282,7 @@
 				<db.url>jdbc:mysql://localhost:3306/catering_db</db.url>
 				<!--<db.url>jdbc:mysql://localhost:3306/catering_db</db.url> -->
 
-				<db.password>abcd-zxcv</db.password>
-				<db.username>root</db.username>
-				<db.com>19889</db.com>
-				<log.info.filepath>logs/info.log</log.info.filepath>
-			</properties>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<db.url>jdbc:mysql://localhost:3306/catering_db</db.url>
-				<db.password>abcd-zxcv</db.password>
-				<db.username>root</db.username>
-				<db.com>19889</db.com>
-				<log.info.filepath>/var/lib/tomcat7/logs/info.log</log.info.filepath>
-			</properties>
-		</profile>
-		<profile>
-			<id>demo</id>
-			<properties>
-				<db.url>jdbc:mysql://localhost:3306/catering_db</db.url>
-				<db.password>abcd-zxcv</db.password>
-				<db.username>root</db.username>
-				<db.com>19889</db.com>
-				<log.info.filepath>../logs/info.log</log.info.filepath>
-			</properties>
-		</profile>
-		<profile>
-			<id>109</id>
-			<properties>
-				<db.url>jdbc:mysql://192.168.1.109:3306/catering_db</db.url>
-				<!--<db.url>jdbc:mysql://localhost:3306/catering_db</db.url> -->
-
-				<db.password>abcd-zxcv</db.password>
+				<db.password>helen520</db.password>
 				<db.username>root</db.username>
 				<db.com>19889</db.com>
 				<log.info.filepath>logs/info.log</log.info.filepath>
@@ -324,27 +292,7 @@
 			<id>test</id>
 			<properties>
 				<db.url>jdbc:mysql://www.sunwayyachts.com:3306/catering_db</db.url>
-				<db.password>abcd-zxcv</db.password>
-				<db.username>root</db.username>
-				<db.com>19889</db.com>
-				<log.info.filepath>logs/info.log</log.info.filepath>
-			</properties>
-		</profile>
-		<profile>
-			<id>joshua</id>
-			<properties>
-				<db.url>jdbc:mysql://localhost:3306/catering_db</db.url>
-				<db.password>abcd-zxcv</db.password>
-				<db.username>root</db.username>
-				<db.com>19889</db.com>
-				<log.info.filepath>logs/info.log</log.info.filepath>
-			</properties>
-		</profile>
-		<profile>
-			<id>yjj</id>
-			<properties>
-				<db.url>jdbc:mysql://localhost:3306/catering_db</db.url>
-				<db.password>abcd-zxcv</db.password>
+				<db.password>helen520</db.password>
 				<db.username>root</db.username>
 				<db.com>19889</db.com>
 				<log.info.filepath>logs/info.log</log.info.filepath>
