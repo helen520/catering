@@ -97,3 +97,9 @@
 #dishPickerBox .dishButton .dishName {
 	font-weight: bold;
 }
+
+#soldOutOnlyDiv {
+	text-align: center;
+	padding: 0.6em 3em 0.3em 0em;
+	float: right;
+}

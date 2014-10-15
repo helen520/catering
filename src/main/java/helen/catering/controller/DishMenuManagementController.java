@@ -411,11 +411,19 @@ public class DishMenuManagementController {
 	}
 
 	@ResponseBody
-	@RequestMapping("cancelDishSoldOut")
-	public Dish cancelDishSoldOut(@RequestParam long dishId,
+	@RequestMapping("editDishSoldOut")
+	public Dish editDishSoldOut(@RequestParam long dishId,
 			@RequestParam long employeeId) throws Exception {
 		_userService.AssertEmployeeAuth(employeeId);
-		return this._menuManagingService.cancelDishSoldOut(dishId);
+		return this._menuManagingService.editDishSoldOut(dishId);
+	}
+
+	@ResponseBody
+	@RequestMapping("restoreSoldOutDishes")
+	public boolean restoreSoldOutDishes(@RequestParam long storeId,
+			@RequestParam long employeeId) throws Exception {
+		_userService.AssertEmployeeAuth(employeeId);
+		return this._menuManagingService.restoreSoldOutDishes(storeId);
 	}
 
 	@ResponseBody

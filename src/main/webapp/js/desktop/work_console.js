@@ -2,6 +2,7 @@ var $isEditing = false;
 var $isDesktop = true;
 var $needEmployeeCheck = true;
 var $templeEmployee = null;
+var editDishView = null;
 
 function StringBuilder() {
 	var _string = new Array();
@@ -49,6 +50,8 @@ $(function() {
 	initDeskView();
 	initDishView();
 	initCheckoutView();
+	editDishView = new EditDishView($("#editDishView"));
+
 	switchToView("DESK_VIEW");
 
 	updateDynamicData(function() {
@@ -73,6 +76,7 @@ function switchToView(toView) {
 	$("#dishView").hide();
 	$("#checkoutView").hide();
 	$("#loginInfoDiv").hide();
+	editDishView.hide();
 
 	if (toView == "DESK_VIEW") {
 		$isEditing = false;
@@ -84,9 +88,10 @@ function switchToView(toView) {
 	} else if (toView == "CHECKOUT_VIEW") {
 		$isEditing = true;
 		showCheckoutView();
-	} else {
+	} else if (toView == "EDIT_DISH_VIEW") {
+		editDishView.show();
+	} else
 		$isEditing = true;
-	}
 }
 
 function loadProperties() {

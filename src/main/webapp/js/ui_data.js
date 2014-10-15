@@ -275,37 +275,44 @@ function updateDishes() {
 			updateDishCategory(dcb.dishCategoryId);
 		}
 	}
+}
 
-	function updateDishCategory(dishCategoryId) {
-		$.ajax({
-			type : 'POST',
-			url : "../storeData/getDishCategoryById/" + dishCategoryId,
-			data : {},
-			dataType : "json",
-			async : false,
-			success : function(dishCategory) {
-				for ( var i in $storeData.menus) {
-					if ($storeData.menus[i].id != dishCategory.menuId) {
-						continue;
-					}
-
-					var dishCategories = [];
-					for ( var j in $storeData.menus[i].dishCategories) {
-						var dc = $storeData.menus[i].dishCategories[j];
-						if (dc.id == dishCategory.id) {
-							dishCategories.push(dishCategory);
-						} else {
-							dishCategories.push(dc);
-						}
-					}
-
-					$storeData.menus[i].dishCategories = dishCategories;
-
-					updateMenuDataHashMaps($storeData.menus);
-				}
-			}
-		});
+function forceUpdateDishes() {
+	for ( var i in $dishCategoryBriefs) {
+		var dcb = $dishCategoryBriefs[i];
+		updateDishCategory(dcb.dishCategoryId);
 	}
+}
+
+function updateDishCategory(dishCategoryId) {
+	$.ajax({
+		type : 'POST',
+		url : "../storeData/getDishCategoryById/" + dishCategoryId,
+		data : {},
+		dataType : "json",
+		async : false,
+		success : function(dishCategory) {
+			for ( var i in $storeData.menus) {
+				if ($storeData.menus[i].id != dishCategory.menuId) {
+					continue;
+				}
+
+				var dishCategories = [];
+				for ( var j in $storeData.menus[i].dishCategories) {
+					var dc = $storeData.menus[i].dishCategories[j];
+					if (dc.id == dishCategory.id) {
+						dishCategories.push(dishCategory);
+					} else {
+						dishCategories.push(dc);
+					}
+				}
+
+				$storeData.menus[i].dishCategories = dishCategories;
+
+				updateMenuDataHashMaps($storeData.menus);
+			}
+		}
+	});
 }
 
 function updateDishOrderCache(dishOrder) {

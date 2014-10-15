@@ -155,7 +155,7 @@ function showConfirmDialog(title, message, confirmCallback, storeId,
 		cancelCallback) {
 	var dialogDiv = $("<div>").addClass("confirmDialog").appendTo('body');
 	$("<div>").text(title).addClass("confirmDialogTitle").appendTo(dialogDiv);
-	$("<div>").text(message).addClass("confirmDialogMessage").appendTo(
+	$("<div>").html(message).addClass("confirmDialogMessage").appendTo(
 			dialogDiv);
 
 	var operationDiv = $("<div>").addClass("operationDiv");

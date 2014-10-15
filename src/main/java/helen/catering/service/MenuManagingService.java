@@ -200,13 +200,34 @@ public class MenuManagingService {
 		return this._dishDao.updateDishList(updateDishList);
 	}
 
-	public Dish cancelDishSoldOut(long dishId) {
+	public Dish editDishSoldOut(long dishId) {
 		try {
 			Dish dish = this._dishDao.getDishById(dishId);
-			dish.setSoldOut(false);
+			dish.setSoldOut(!dish.isSoldOut());
 			return this._dishDao.save(dish);
 		} catch (Exception e) {
 			return null;
+		}
+	}
+
+	public boolean restoreSoldOutDishes(long storeId) {
+		try {
+			List<Menu> menus = _menuDao.getMenusByStoreId(storeId);
+
+			for (Menu menu : menus) {
+				for (DishCategory dc : menu.getDishCategories()) {
+					for (Dish dish : dc.getDishes()) {
+						if (dish.isSoldOut()) {
+							dish.setSoldOut(false);
+							_dishDao.save(dish);
+						}
+					}
+				}
+			}
+
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
 	}
 

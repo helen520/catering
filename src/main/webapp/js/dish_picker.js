@@ -1,73 +1,128 @@
-function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
+function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories,
+		isEditDish) {
 
 	var self = this;
 	var currentMenuIndex = 0;
 	var currentDishCategoryId = 0;
 	var filteredDishes = [];
 	var currentMenuDishMap = {};
-	var dishPickerBox = $("<div>").attr("id", "dishPickerBox").appendTo(
-			dishPickerContainer);// 增加dishPicker样式作用区域Id
-	var dishPickerBoxTopLeft = $("<div>").attr("id", "dishPickerBoxTopLeft")
-			.appendTo(dishPickerBox);
-	var filterContainer = $("<div>").attr("id", "filterDiv").appendTo(
-			dishPickerBoxTopLeft);
-	if (!hideCategories) {
-		filterContainer.text($.i18n.prop('string_chaZhaoCaiPin'));
-	}
+	var soldOutOnly = false;
 
-	var groupContainer = $("<div>").addClass("dishCategorySelector").appendTo(
-			dishPickerBoxTopLeft);
-	if (hideCategories) {
-		groupContainer.hide();
-	}
-	var listContainer = $("<div>").addClass("dishSelector").addClass(
-			"overthrow").appendTo(dishPickerBox);
+	var groupContainer = null;
+	var filterContainer = null;
+	var listContainer = null;
 
-	$("<input>").attr("name", "dishFilterTextInput").attr("type", "text")
-			.appendTo(filterContainer).bind('input propertychange', searchDish);
+	var inti = function() {
 
-	$("<button>").text("手写菜").attr("id", "addHandwriteOrderItemButton")
-			.addClass("button").click(addHandwriteOrderItemButtonClick)
-			.appendTo(filterContainer);
-	$("<button>").text($.i18n.prop('string_qingKong')).attr("id",
-			"clearDishFilterButton").addClass("button").click(function() {
-		self.clearSearchTextAndSetDefaultDishes();
-	}).appendTo(filterContainer);
+		var dishPickerBox = $("<div>").attr("id", "dishPickerBox").appendTo(
+				dishPickerContainer);// 增加dishPicker样式作用区域Id
+		var dishPickerBoxTopLeft = $("<div>")
+				.attr("id", "dishPickerBoxTopLeft").appendTo(dishPickerBox);
+		filterContainer = $("<div>").attr("id", "filterDiv").appendTo(
+				dishPickerBoxTopLeft);
+		if (!hideCategories) {
+			filterContainer.text($.i18n.prop('string_chaZhaoCaiPin'));
+		}
 
-	groupContainer.delegate(".dishCategoryButton", "click",
-			dishCategoryButtonClick);
-	listContainer.delegate(".dishButton", "click", dishButtonClick);
+		groupContainer = $("<div>").addClass("dishCategorySelector").appendTo(
+				dishPickerBoxTopLeft);
+		if (hideCategories) {
+			groupContainer.hide();
+		}
+		listContainer = $("<div>").addClass("dishSelector").addClass(
+				"overthrow").appendTo(dishPickerBox);
 
-	renderDishGroups();
+		$("<input>").attr("name", "dishFilterTextInput").attr("type", "text")
+				.appendTo(filterContainer).bind('input propertychange',
+						searchDish);
 
-	this.refreshUI = renderDishes;
+		$("<button>").text($.i18n.prop('string_qingKong')).attr("id",
+				"clearDishFilterButton").addClass("button").click(function() {
+			self.clearSearchTextAndSetDefaultDishes();
+		}).appendTo(filterContainer);
+
+		if (isEditDish) {
+			var idStr = 'cb' + Math.ceil(Math.random() * 10e10).toString();
+			var soldOutOnlyDiv = $('<div id="soldOutOnlyDiv">').appendTo(
+					filterContainer);
+			$('<input type="checkbox">').attr('id', idStr).click(function() {
+				soldOutOnly = $(this)[0].checked;
+				renderDishes();
+			}).appendTo(soldOutOnlyDiv);
+
+			$('<label>').attr('for', idStr).text("只显示沽清菜品").appendTo(
+					soldOutOnlyDiv);
+			listContainer
+					.delegate(".dishButton", "click", editDishSoldOutClick);
+			function editDishSoldOutClick() {
+				var dishId = $(this).data("dishId");
+				editDishSoldOut(dishId);
+			}
+		} else {
+			$("<button>").text("手写菜").attr("id", "addHandwriteOrderItemButton")
+					.addClass("button").click(addHandwriteOrderItemButtonClick)
+					.appendTo(filterContainer);
+			function addHandwriteOrderItemButtonClick() {
+
+				if ($defaultEditableDish == null) {
+					alert("系统未设定默认手写菜");
+					return;
+				}
+
+				if (dishSelectedCallback) {
+					var dishName = $("[name='dishFilterTextInput']",
+							filterContainer).val();
+					dishSelectedCallback($defaultEditableDish, dishName);
+				}
+			}
+
+			listContainer.delegate(".dishButton", "click", dishButtonClick);
+			function dishButtonClick() {
+				var dishId = $(this).data("dishId");
+				var selectedDish = currentMenuDishMap[dishId];
+
+				if (selectedDish.soldOut) {
+					showDishSoldOutDialog($.i18n.prop('string_xiTongTiShi'),
+							$.i18n.prop('string_caiPinYiGuQing'),
+							selectedDish.id, cancelDishSoldOutCallback);
+					return;
+				}
+
+				if (dishSelectedCallback) {
+					dishSelectedCallback(selectedDish);
+				}
+
+				renderDishes();
+			}
+		}
+
+		groupContainer.delegate(".dishCategoryButton", "click",
+				dishCategoryButtonClick);
+		function dishCategoryButtonClick() {
+			currentDishCategoryId = $(this).data("dishCategoryId");
+			renderDishGroups();
+			renderDishes();
+		}
+
+		renderDishGroups();
+	};
+
+	this.refreshUI = function() {
+		renderDishes();
+	};
 
 	this.filteredDishes = function() {
 		return filteredDishes;
 	};
 
 	this.clearSearchTextAndSetDefaultDishes = function() {
-		$("[name='dishFilterTextInput']", "#dishView").val("");
+		$("[name='dishFilterTextInput']").val("");
 		currentDishCategoryId = 0;
 		filteredDishes = [];
 		renderDishGroups();
 	};
 
-	function addHandwriteOrderItemButtonClick() {
-
-		if ($defaultEditableDish == null) {
-			alert("系统未设定默认手写菜");
-			return;
-		}
-
-		if (dishSelectedCallback) {
-			var dishName = $("[name='dishFilterTextInput']", filterContainer)
-					.val();
-			dishSelectedCallback($defaultEditableDish, dishName);
-		}
-	}
-
-	function searchDish(event, filterText) {
+	var searchDish = function(event, filterText) {
 		if (!filterText) {
 			filterText = $("[name='dishFilterTextInput']", filterContainer)
 					.val();
@@ -111,31 +166,7 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 			}
 			return true;
 		}
-	}
-
-	function dishCategoryButtonClick() {
-		currentDishCategoryId = $(this).data("dishCategoryId");
-		renderDishGroups();
-		renderDishes();
-	}
-
-	function dishButtonClick() {
-		var dishId = $(this).data("dishId");
-		var selectedDish = currentMenuDishMap[dishId];
-
-		if (selectedDish.soldOut) {
-			showDishSoldOutDialog($.i18n.prop('string_xiTongTiShi'), $.i18n
-					.prop('string_caiPinYiGuQing'), selectedDish.id,
-					cancelDishSoldOutCallback);
-			return;
-		}
-
-		if (dishSelectedCallback) {
-			dishSelectedCallback(selectedDish);
-		}
-
-		renderDishes();
-	}
+	};
 
 	function showDishSoldOutDialog(title, message, dishId,
 			cancelDishSoldOutCallback) {
@@ -163,44 +194,37 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 		var modal = $(dialogDiv).modal();
 	}
 
-	function cancelDishSoldOutCallback(dishId) {
-		showEmployeeLoginDialog(cancelDishSoldOut, null, null, true);
-		function cancelDishSoldOut() {
-			if (!$storeData.employee.canCancelDishSoldOut && $templeEmployee
-					&& !$templeEmployee.canCancelDishSoldOut) {
-				showAlertDialog($.i18n.prop('string_cuoWu'), "权限不足!无法进行操作!");
-				return;
-			}
-
-			$.ajax({
-				type : 'POST',
-				url : "../admin/cancelDishSoldOut",
-				data : {
-					dishId : dishId,
-					employeeId : $storeData.employee.id
-				},
-				dataType : 'text',
-				error : function(error) {
-				},
-				success : function(dish) {
-					showAlertDialog($.i18n.prop('string_xiTongTiShi'), $.i18n
-							.prop('string_caoZuoChengGong'));
-					$dishMap[dishId].soldOut = false;
-					renderDishes();
-					initkeyDown();
-				}
-			});
+	var editDishSoldOut = function(dishId) {
+		if (!$storeData.employee.canCancelDishSoldOut && $templeEmployee
+				&& !$templeEmployee.canCancelDishSoldOut) {
+			showAlertDialog($.i18n.prop('string_cuoWu'), "权限不足!无法进行操作!");
+			return;
 		}
+
+		$.ajax({
+			type : 'POST',
+			url : "../admin/editDishSoldOut",
+			data : {
+				dishId : dishId,
+				employeeId : $storeData.employee.id
+			},
+			dataType : 'text',
+			error : function(error) {
+			},
+			success : function(dish) {
+				$dishMap[dishId].soldOut = !$dishMap[dishId].soldOut;
+				renderDishes();
+				initkeyDown();
+			}
+		});
+	};
+
+	function cancelDishSoldOutCallback(dishId) {
+		showEmployeeLoginDialog(editDishSoldOut, dishId, null, true);
+
 	}
 
-	function menuButtonClick() {
-		currentMenuIndex++;
-		currentDishCategoryId = 0;
-		renderDishGroups();
-		renderDishes();
-	}
-
-	function renderDishGroups() {
+	var renderDishGroups = function() {
 		groupContainer.empty();
 
 		var menus = $storeData.menus;
@@ -212,6 +236,12 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 		var menu = menus[currentMenuIndex];
 		var menuButton = $("<button>").addClass("menuButton").click(
 				menuButtonClick);
+		function menuButtonClick() {
+			currentMenuIndex++;
+			currentDishCategoryId = 0;
+			renderDishGroups();
+			renderDishes();
+		}
 		menuButton.text(menu.name + "▼").appendTo(groupContainer);
 
 		for ( var i in menu.dishCategories) {
@@ -227,9 +257,9 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 			}
 		}
 		renderDishes();
-	}
+	};
 
-	function renderDishes() {
+	var renderDishes = function() {
 
 		$("[name='dishFilterTextInput']", filterContainer).focus();
 		changeSearchInputCallBack(searchDish);
@@ -253,13 +283,27 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 			return;
 		}
 
-		var selectedDesk = $deskMap[$curDishOrder.deskId];
+		var selectedDesk = null;
+
+		if ($curDishOrder) {
+			$deskMap[$curDishOrder.deskId];
+		}
+
 		var orgDishButtons = listContainer.children();
 		var orgDishButtonCount = orgDishButtons.length;
 		var showDishCount = 0;
 
 		var dishes = currentDishCategoryId == -1 ? filteredDishes
 				: dishCategory.dishes;
+
+		if (soldOutOnly) {
+			dishes = [];
+			for ( var i in $dishMap) {
+				var dish = $dishMap[i];
+				if (dish.soldOut)
+					dishes.push(dish);
+			}
+		}
 
 		for ( var i in dishes) {
 			var dishButton = null;
@@ -296,17 +340,20 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 			dishPriceAndUnitHtml += dish.noDiscount ? "&nbsp;*" : '';
 			dishPriceAndUnitDiv.html(dishPriceAndUnitHtml);
 
-			var clientOrderItems = null;
-			for ( var i in $curDishOrder.orderItems) {
-				var orderItem = $curDishOrder.orderItems[i];
-				if (orderItem.id == 0 && orderItem.dishId == dish.id
-						&& orderItem.mealDealItemId == null) {
-					clientOrderItems = orderItem;
+			$('span', dishButton).remove();
+			var clientOrderItem = null;
+			if ($curDishOrder) {
+				for ( var i in $curDishOrder.orderItems) {
+					var orderItem = $curDishOrder.orderItems[i];
+					if (orderItem.id == 0 && orderItem.dishId == dish.id
+							&& orderItem.mealDealItemId == null) {
+						clientOrderItem = orderItem;
+					}
 				}
 			}
-			$('span', dishButton).remove();
-			if (clientOrderItems != null) {
-				$('<span>').text(clientOrderItems.amount).appendTo(dishButton);
+
+			if (clientOrderItem != null) {
+				$('<span>').text(clientOrderItem.amount).appendTo(dishButton);
 			}
 
 			if (dish.soldOut) {
@@ -328,9 +375,11 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories) {
 		for (var j = showDishCount; j < orgDishButtonCount; j++) {
 			$(orgDishButtons[j]).hide();
 		}
-	}
+	};
 
 	$(window).resize(function() {
 		renderDishes();
 	});
+
+	inti();
 }

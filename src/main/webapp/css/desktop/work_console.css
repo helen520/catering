@@ -202,3 +202,28 @@ body {
 	border-bottom: #EEE solid 1px;
 	border-right: #EEE solid 1px;
 }
+
+#editDishViewBottom {
+	position: fixed;
+	left: 0px;
+	right: 0em;
+	bottom: 0em;
+	height: 2em;
+	padding: 0.3em 0.2em 0.5em 0.2em;
+	background-color: #D9D9B3;
+}
+
+#rightCmdButtonContainer {
+	width: 50%;
+	float: right;
+	text-align: right;
+}
+
+#editDishViewMain {
+	position: fixed;
+	top: 0em;
+	left: 0em;
+	right: 0em;
+	bottom: 2.8em;
+	padding: 0em;
+}

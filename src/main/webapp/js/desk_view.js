@@ -696,6 +696,9 @@ function functionMenuButtonClick() {
 			"margin-bottom", "1em").appendTo(functionMenuButtonSelector);
 	$("<legend>").text("系统").appendTo(systemFieldset);
 
+	var editDishSoldoutButton = $("<div>").addClass(
+			"ui-radius ui-shadow functionMenuButton").text("编辑菜品沽清");
+
 	if (!$isDesktop) {
 		var interfaceFieldset = $("<fieldset>").attr("id", "reportPanel").css(
 				"margin-bottom", "1em").appendTo(functionMenuButtonSelector);
@@ -759,6 +762,9 @@ function functionMenuButtonClick() {
 		});
 	}
 
+	if ($storeData.employee.canCancelDishSoldOut)
+		editDishSoldoutButton.appendTo(systemFieldset);
+
 	var chooseTypeButton = $("<div>").addClass(
 			"ui-radius ui-shadow functionMenuButton").text("更换操作页面").appendTo(
 			systemFieldset);
@@ -802,6 +808,11 @@ function functionMenuButtonClick() {
 
 	chooseTypeButton.click(function() {
 		window.location.href = '../chooseType';
+	});
+
+	editDishSoldoutButton.click(function() {
+		functionMenuPanelDialog.close();
+		switchToView('EDIT_DISH_VIEW');
 	});
 
 	logoutButton.click(function() {

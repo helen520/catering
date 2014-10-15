@@ -3,7 +3,7 @@ var $curCustomer;
 var $isSubmitCheckout = false;
 
 function initCheckoutView() {
-	$("#confirmCheckoutButton").click(submitCheckOut);
+	$("#confirmCheckoutButton").click(prepareToSubmitCheckout);
 	$("#cancelCheckoutButton").click(function() {
 		switchToView('DESK_VIEW');
 	});
@@ -352,6 +352,27 @@ function closePaymentTypeDialog(result) {
 	$("#dialogBackground").hide();
 }
 
+function prepareToSubmitCheckout() {
+	var actualPaid = 0;
+	var couponValue = getDishOrderCouponValue($curDishOrder);
+	$("[name='payAmountLabel']").each(
+			function() {
+				actualPaid += parseFloat($(this).text())
+						* $(this).data("paymentType").exchangeRate;
+			});
+	actualPaid += couponValue;
+
+	if (!$curDishOrder)
+		return;
+
+	if ($curDishOrder.finalPrice != actualPaid) {
+		showConfirmDialog("提示", "应收金额 : " + $curDishOrder.finalPrice
+				+ " ,实收金额 : " + actualPaid + " <br>实收差价 : "
+				+ (actualPaid - $curDishOrder.finalPrice) + " ,是否确定结账?",
+				submitCheckOut);
+	} else
+		submitCheckOut();
+}
 function submitCheckOut() {
 
 	if ($isSubmitCheckout)

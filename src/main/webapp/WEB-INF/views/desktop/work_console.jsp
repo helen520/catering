@@ -33,6 +33,16 @@
 	<%@ include file="checkout_view.jsp"%>
 	<%@ include file="../shiftClassDialog.jsp"%>
 
+	<div id="editDishView" style="display: none;">
+		<div id="editDishViewMain" class="dishPicker"></div>
+		<div id="editDishViewBottom">
+			<div id="switchToDeskViewButton" class="dishOrderCmdButton">返回</div>
+			<div id="rightCmdButtonContainer">
+				<div id="restoreSoldOutDishesButton" class="dishOrderCmdButton">恢复所有菜品销售</div>
+			</div>
+		</div>
+	</div>
+
 	<div id="debugOutput"></div>
 
 	<script type="text/javascript" src="../js/vendor/jquery-1.10.1.min.js"></script>
@@ -68,6 +78,8 @@
 	<script type="text/javascript" src="../js/mobile/dish_order_list.js"
 		charset="utf-8"></script>
 	<script type="text/javascript" src="../js/desktop/dish_view.js"
+		charset="utf-8"></script>
+	<script type="text/javascript" src="../js/edit_dish_view.js"
 		charset="utf-8"></script>
 </body>
 </html>
