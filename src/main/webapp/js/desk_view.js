@@ -762,7 +762,7 @@ function functionMenuButtonClick() {
 		});
 	}
 
-	if ($storeData.employee.canCancelDishSoldOut)
+	if ($storeData.employee.canCancelDishSoldOut && $isDesktop)
 		editDishSoldoutButton.appendTo(systemFieldset);
 
 	var chooseTypeButton = $("<div>").addClass(
