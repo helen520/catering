@@ -82,6 +82,10 @@ public class OrderingService {
 
 	public DishOrder getDishOrderById(long id) {
 		DishOrder dishOrder = this._dishOrderDao.getDishOrderById(id);
+
+		if (dishOrder == null)
+			return null;
+
 		if (dishOrder.getOrderItems() != null) {
 			for (OrderItem oi : dishOrder.getOrderItems()) {
 				if (oi.getState() == OrderItem.STATE_WAITING) {
@@ -292,6 +296,9 @@ public class OrderingService {
 			orgDishOrder.setMemo(newDishOrder.getMemo());
 		}
 
+		if (orgDishOrder.getDishOrderTags() == null)
+			orgDishOrder.setDishOrderTags(new ArrayList<DishOrderTag>());
+
 		if (newDishOrder.getDishOrderTags() != null) {
 			for (DishOrderTag dot : newDishOrder.getDishOrderTags()) {
 				if (dot.getId() == 0) {
@@ -311,6 +318,9 @@ public class OrderingService {
 				}
 				existOrderItems.addAll(orgDishOrder.getOrderItems());
 			}
+
+			if (orgDishOrder.getOrderItems() == null)
+				orgDishOrder.setOrderItems(new ArrayList<OrderItem>());
 
 			for (OrderItem oi : newDishOrder.getOrderItems()) {
 				boolean isExisted = false;
@@ -332,6 +342,9 @@ public class OrderingService {
 				isExisted = false;
 			}
 		}
+
+		if (orgDishOrder.getPayRecords() == null)
+			orgDishOrder.setPayRecords(new ArrayList<PayRecord>());
 
 		if (newDishOrder.getPayRecords() != null) {
 			for (PayRecord pr : newDishOrder.getPayRecords()) {
@@ -363,6 +376,10 @@ public class OrderingService {
 						newDishOrder.getStoreId(), newDishOrder.getPrePay(),
 						user.getId(), orgDishOrder.getId(), user.getBalance());
 			}
+		}
+
+		if (newDishOrder.getSerialNumber() != null) {
+			orgDishOrder.setSerialNumber(newDishOrder.getSerialNumber());
 		}
 
 		updateDishOrderPrice(orgDishOrder);
@@ -1023,5 +1040,9 @@ public class OrderingService {
 		List<DishOrder> orders = _dishOrderDao
 				.getDishOrderByEmployeeId(employeeId);
 		return orders;
+	}
+
+	public OrderItem getOrderItemById(long orderItemId) {
+		return _dishOrderDao.getOrderItemById(orderItemId);
 	}
 }

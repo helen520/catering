@@ -2,6 +2,7 @@ function DishPicker(dishPickerContainer) {
 
 	var uiDataManager = UIDataManager.getInstance();
 	var dishOrderManager = DishOrderManager.getInstance();
+	var authorityManager = AuthorityManager.getInstance();
 	var storeData = uiDataManager.getStoreData();
 
 	var groupContainer = $("<div>");
@@ -116,17 +117,31 @@ function DishPicker(dishPickerContainer) {
 	};
 
 	var createDishDiv = function() {
-		return $("<div>").click(function() {
-			var dish = $(this).data("dish");
-			if (dish.soldOut) {
-				return;
-			}
+		return $("<div>")
+				.click(
+						function() {
+							var dish = $(this).data("dish");
+							if (dish.soldOut) {
+								new ConfirmDialog($.i18n.prop('string_Notice'),
+										$.i18n.prop('string_RestoreDish'),
+										okCallback).show();
+								function okCallback() {
+									authorityManager.getAuthority(
+											'canCancelDishSoldOut', okCallback,
+											true);
+									function okCallback() {
+										uiDataManager.updateDish(dish.id);
+									}
+								}
+								return;
+							}
 
-			if (keyboardContainer.css('display') != 'none') {
-				$('#dishFilterTextInput', dishPickerContainer).val('').focus();
-			}
-			dishOrderManager.orderDish(dish);
-		});
+							if (keyboardContainer.css('display') != 'none') {
+								$('#dishFilterTextInput', dishPickerContainer)
+										.val('').focus();
+							}
+							dishOrderManager.orderDish(dish);
+						});
 	};
 
 	var renderDishes = function() {
@@ -147,7 +162,14 @@ function DishPicker(dishPickerContainer) {
 		}
 		listContainer.height(listContainerHeight);
 
-		var dishes = currentDishCategory ? currentDishCategory.dishes : [];
+		var dishes = [];
+
+		if (currentDishCategory) {
+			currentDishCategory = uiDataManager
+					.getDishCategoryById(currentDishCategory.id);
+			dishes = currentDishCategory.dishes;
+		}
+
 		var filterText = $('#dishFilterTextInput', dishPickerContainer).val();
 
 		if (keyboardContainer.css('display') != 'none') {

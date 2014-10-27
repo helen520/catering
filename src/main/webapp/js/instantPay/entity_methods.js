@@ -1,53 +1,15 @@
 var DishOrder = {
 	STATE : {
-		PROCESSING : 'processing',
-		PAID : 'paid',
-		ARCHIVED : 'archived',
-		CREATING : 'creating',
-		CANCELLED : 'cancelled',
-		PAYING : 'paying'
-	},
-
-	mapServerDishOrder : function(serverDishOrder) {
-		var dishOrder = DataMapper
-				.mapServerEntity('DishOrder', serverDishOrder);
-		dishOrder.orgFinalPrice = dishOrder.finalPrice;
-		if (dishOrder.orderItems) {
-			for ( var i in dishOrder.orderItems) {
-				var orderItem = dishOrder.orderItems[i];
-				dishOrder.orderItems[i] = DataMapper.mapServerEntity(
-						'OrderItem', orderItem);
-				orderItem = dishOrder.orderItems[i];
-				if (orderItem.orderItemTags) {
-					for ( var j in orderItem.orderItemTags) {
-						var oit = orderItem.orderItemTags[j];
-						orderItem.orderItemTags[j] = DataMapper
-								.mapServerEntity('OrderItemTag', oit);
-					}
-				}
-			}
-		}
-		if (dishOrder.payRecords) {
-			for ( var i in dishOrder.payRecords) {
-				var payRecord = dishOrder.payRecords[i];
-				dishOrder.payRecords[i] = DataMapper.mapServerEntity(
-						'PayRecord', payRecord);
-			}
-		}
-		if (dishOrder.dishOrderTags) {
-			dishOrder.tags = [];
-			for ( var i in dishOrder.dishOrderTags) {
-				var dishOrderTag = DataMapper.mapServerEntity('DishOrderTag',
-						dishOrder.dishOrderTags[i]);
-				dishOrder.tags.push(dishOrderTag);
-			}
-			delete dishOrder.dishOrderTags;
-		}
-
-		return dishOrder;
+		PROCESSING : '1',
+		PAID : '2',
+		ARCHIVED : '3',
+		CREATING : '4',
+		CANCELLED : '5',
+		PAYING : '6'
 	},
 
 	updatePrice : function(dishOrder) {
+
 		if (dishOrder.orderItems == null) {
 			dishOrder.totalPrice = dishOrder.discountedPrice = 0;
 			dishOrder.serviceFee = dishOrder.finalPrice = 0;
@@ -83,10 +45,15 @@ var DishOrder = {
 		dishOrder.serviceFee = serviceFee;
 
 		var finalPrice = discountedPrice + serviceFee;
+		dishOrder.oddmentReduce = dishOrder.oddmentReduce ? dishOrder.oddmentReduce
+				: 0;
 		finalPrice = Math.round(finalPrice) - dishOrder.oddmentReduce;
-		if (finalPrice < 0) {
+
+		if (dishOrder.prePay != null && dishOrder.prePay > 0)
+			finalPrice = finalPrice - dishOrder.prePay;
+
+		if (finalPrice < 0)
 			finalPrice = 0;
-		}
 
 		if (!dishOrder.orgFinalPrice || finalPrice != dishOrder.orgFinalPrice) {
 			finalPrice += dishOrder.oddmentReduce;
@@ -112,13 +79,11 @@ var DishOrder = {
 
 	getDishOrderToSubmit : function(dishOrder) {
 
-		var dishOrderToSubmit = DataMapper.mapClientEntity('DishOrder', $
-				.extend(true, {}, dishOrder));
+		var dishOrderToSubmit = dishOrder;
 		if (dishOrder.orderItems) {
 			dishOrderToSubmit.order_items = [];
 			for ( var i in dishOrder.orderItems) {
-				var orderItem = DataMapper.mapClientEntity('OrderItem', $
-						.extend(true, {}, dishOrder.orderItems[i]));
+				var orderItem = dishOrder.orderItems[i];
 				if (orderItem.id != 0) {
 					continue;
 				}
@@ -134,8 +99,7 @@ var DishOrder = {
 					orderItemTags = $.merge(orderItemTags, orderItem.tags);
 				}
 				for ( var j in orderItemTags) {
-					var oit = DataMapper.mapClientEntity('OrderItemTag', $
-							.extend(true, {}, orderItemTags[j]));
+					var oit = orderItemTags[j];
 					orderItemTags[j] = oit;
 				}
 				orderItem.order_item_tags = orderItemTags;
@@ -150,7 +114,6 @@ var DishOrder = {
 				if (payRecord.makeChange) {
 					payRecord.amount -= payRecord.change;
 				}
-				payRecord = DataMapper.mapClientEntity('PayRecord', payRecord);
 				if (payRecord.id != 0) {
 					continue;
 				}
@@ -162,8 +125,7 @@ var DishOrder = {
 		if (dishOrder.tags) {
 			dishOrderToSubmit.dish_order_tags = [];
 			for ( var i in dishOrder.tags) {
-				var dishOrderTag = DataMapper.mapClientEntity('DishOrderTag', $
-						.extend(true, {}, dishOrder.tags[i]));
+				var dishOrderTag = dishOrder.tags[i];
 				if (dishOrderTag.id != 0) {
 					continue;
 				}
@@ -232,9 +194,10 @@ var DishOrder = {
 var OrderItem = {
 
 	STATE : {
-		WAITING : 'waiting',
-		COOKING : 'cooking',
-		CANCELLED : 'cancelled'
+		WAITING : '1',
+		COOKING : '4',
+		CANCELLED : '7',
+		SERVED : '6'
 	},
 
 	newFromDish : function(dish, dishUnit, employee, customerCount) {
@@ -260,9 +223,6 @@ var OrderItem = {
 			amount : 1,
 			state : OrderItem.STATE.WAITING
 		};
-
-		orderItem.orgUnitExchangeRate = dishUnit ? dishUnit.exchangeRate : 1;
-		orderItem.unitExchangeRate = orderItem.orgUnitExchangeRate;
 
 		orderItem.employeeId = employee ? employee.id : null;
 		customerCount = customerCount ? customerCount : 1;
@@ -316,10 +276,6 @@ var OrderItem = {
 		}
 
 		var unitRatio = 1;
-		if (!orderItem.editable && orderItem.orgUnitExchangeRate != 0) {
-			unitRatio = orderItem.unitExchangeRate
-					/ orderItem.orgUnitExchangeRate;
-		}
 		dishPrice *= unitRatio;
 		dishPrice = Math.round(dishPrice * 10) / 10;
 

@@ -12,14 +12,13 @@ function WorkConsole() {
 	var init = function() {
 		jQuery.i18n.properties({
 			name : 'strings', // 资源文件名称
-			path : '../resources/i18n/', // 资源文件路径
+			path : '../resources/instantPay/', // 资源文件路径
 			mode : 'map', // 用Map的方式使用资源文件中的值
 		});
 		uiDataManager.attachEvent('onDataLoaded', uiDataManagerDataLoaded);
 		uiDataManager.loadData();
 
 		function uiDataManagerDataLoaded() {
-			dishOrderCache.loadMyDishOrders();
 
 			dishView = new DishView($("#dishView"));
 			checkoutView = new CheckoutView($("#checkoutView"));
@@ -36,6 +35,8 @@ function WorkConsole() {
 			}
 
 			self.switchToView("DISH_VIEW");
+
+			dishOrderCache.loadMyDishOrders();
 		}
 
 		dishOrderManager.attachEvent('onDishOrderPaid', function(dishOrder) {

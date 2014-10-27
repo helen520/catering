@@ -25,6 +25,7 @@ function UIDataManager() {
 	};
 
 	var defaultEditableDish = null;
+	var isDynamicDataError = false;
 
 	var _storeData = {};
 	this.getStoreData = function() {
@@ -117,25 +118,32 @@ function UIDataManager() {
 	};
 
 	var updateMenu = function() {
-		var payload = getJsonRPCPayload();
-		if (!session_id) {
-			payload.params.db = db;
-		}
-		var ajaxReq = getDefaultAjax(payload,
-				rpc_urls.get_dish_category_hash_dict);
-
-		$.ajax(ajaxReq).done(function(response, textStatus, jqXHR) {
-			if (response.error) {
-				return;
+		var ajaxRequest = {
+			type : 'POST',
+			url : "../storeData/getdDishCategoryHashDictDynamicData/"
+					+ $storeId,
+			dataType : "json",
+			async : true,
+			error : function(error) {
+				isDynamicDataError = true;
+				new AlertDialog("提示", "同步菜单出错!", function() {
+					window.setTimeout(updateMenu, 100);
+				}).show();
+			},
+			success : function(dish_category_hash_dict) {
+				isDynamicDataError = false;
+				updateDishes(dish_category_hash_dict);
 			}
+		};
 
-			updateDishes(response.result);
-		}).always(function() {
-			window.setTimeout(updateMenu, 30 * 1000);
+		$.ajax(ajaxRequest).always(function() {
+			if (!isDynamicDataError)
+				window.setTimeout(updateMenu, 30 * 1000);
 		});
 	};
 
 	var processStoreData = function() {
+		_store = _storeData.store;
 		for ( var i in _storeData.desks) {
 			deskMap[_storeData.desks[i].id] = _storeData.desks[i];
 		}
@@ -265,58 +273,71 @@ function UIDataManager() {
 		}
 	};
 
+	this.updateDish = function(dishId) {
+		$.ajax({
+			type : 'POST',
+			url : "../admin/editDishSoldOut",
+			data : {
+				dishId : dishId,
+				employeeId : AuthorityManager.getInstance()
+						.getCurrentEmployee().id
+			},
+			dataType : 'text',
+			error : function(error) {
+			},
+			success : function(dish) {
+				updateMenu();
+			}
+		});
+
+	};
+
 	var updateDishes = function(dishCategoryHashDict) {
 		for ( var dishCategoryId in dishCategoryHashDict) {
-			var hash = dishCategoryHashDict[dishCategoryId];
+			var jsonHash = dishCategoryHashDict[dishCategoryId].jsonHash;
 			if (dishCategoryMap[dishCategoryId]) {
-				if (dishCategoryMap[dishCategoryId].hash != hash) {
-					updateDishCategory(dishCategoryId, hash);
+				if (dishCategoryMap[dishCategoryId].jsonHash != jsonHash) {
+					updateDishCategory(dishCategoryId);
 				}
 			} else {
-				updateDishCategory(dishCategoryId, hash);
+				updateDishCategory(dishCategoryId);
 			}
 		}
 	};
 
-	var updateDishCategory = function(dishCategoryId, hash) {
-		var payload = getJsonRPCPayload();
-		payload.params.dish_category_id = dishCategoryId;
-		var ajaxReq = getDefaultAjax(payload, rpc_urls.get_dish_category_by_id);
+	var updateDishCategory = function(dishCategoryId) {
 
-		$.ajax(ajaxReq).done(
-				function(response, textStatus, jqXHR) {
-					if (response.error) {
-						return;
+		$.ajax({
+			type : 'POST',
+			url : "../storeData/getDishCategoryById/" + dishCategoryId,
+			data : {},
+			dataType : "json",
+			async : false,
+			success : function(dishCategory) {
+				if (!dishCategory)
+					return;
+
+				for ( var i in _storeData.menus) {
+					if (_storeData.menus[i].id != dishCategory.menuId) {
+						continue;
 					}
 
-					var dishCategory = DataMapper.mapServerEntity(
-							'DishCategory', response.result);
-					dishCategory.hash = hash;
-					for ( var i in dishCategory.dishes) {
-						dishCategory.dishes[i] = DataMapper.mapServerEntity(
-								'Dish', dishCategory.dishes[i]);
-					}
-					for ( var i in _storeData.menus) {
-						if (_storeData.menus[i].id != dishCategory.menuId) {
-							continue;
+					var dishCategories = [];
+					for ( var j in _storeData.menus[i].dishCategories) {
+						var dc = _storeData.menus[i].dishCategories[j];
+						if (dc.id == dishCategory.id) {
+							dishCategories.push(dishCategory);
+						} else {
+							dishCategories.push(dc);
 						}
-
-						var dishCategories = [];
-						for ( var j in _storeData.menus[i].dishCategories) {
-							var dc = _storeData.menus[i].dishCategories[j];
-							if (dc.id == dishCategory.id) {
-								dishCategories.push(dishCategory);
-							} else {
-								dishCategories.push(dc);
-							}
-						}
-
-						_storeData.menus[i].dishCategories = dishCategories;
-						updateMenuDataHashMaps(_storeData.menus);
 					}
+					_storeData.menus[i].dishCategories = dishCategories;
+					updateMenuDataHashMaps(_storeData.menus);
+				}
 
-					fireEvent('onMenuChanged');
-				});
+				fireEvent('onMenuChanged');
+			}
+		});
 	};
 
 	this.loadData = function() {
@@ -329,7 +350,7 @@ function UIDataManager() {
 				.ajax({
 					url : "../storeData/getStoreDataById/" + $storeId,
 					async : false,
-					error : function(message) {
+					error : function(error) {
 						loadingDialog.hide();
 						new AlertDialog($.i18n.prop('string_cuoWu'),
 								error.responseText).show();

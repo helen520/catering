@@ -192,6 +192,9 @@
 					<li><label>大字体显示菜名</label> <input id="storeIsDoubleSizeFont"
 						type="checkbox" /></li>
 					<br />
+					<li><label>结账弹出流水号</label> <input id="storePrintsSerialNumber"
+						type="checkbox" /></li>
+					<br />
 					<li><label>店内活动(结账单显示)</label> <textarea id="storeActivity"
 							class="ui-input ui-radius ui-shadow ui-border-solid" rows="5"
 							cols="20"></textarea>

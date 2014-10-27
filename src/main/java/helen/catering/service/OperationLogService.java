@@ -96,13 +96,12 @@ public class OperationLogService {
 	}
 
 	public void applyDiscountRule(long employeeId, DishOrder dishOrder,
-			long orderItemId, Long discountRuleId) {
+			OrderItem orderItem, Long discountRuleId) {
 		try {
 			DiscountRule discountRule = null;
 			if (discountRuleId != null) {
 				discountRule = _discountRuleDao.find(discountRuleId);
 			}
-			OrderItem oi = _dishOrderDao.getOrderItemById(orderItemId);
 			Employee employee = _employeeDao.find(employeeId);
 
 			OperationLog opl = new OperationLog();
@@ -111,10 +110,10 @@ public class OperationLogService {
 			opl.setStoreId(dishOrder.getStoreId());
 			opl.setOperatorEmployeeId(employeeId);
 			opl.setDishOrderId(dishOrder.getId());
-			opl.setOrderItemId(orderItemId);
 			opl.setDataSnapShot(discountRuleId + "");
-			if (oi != null && employee != null) {
-				String text = "菜品优惠 菜名:" + oi.getDishName() + ",优惠名称: ";
+			if (orderItem != null && employee != null) {
+				opl.setOrderItemId(orderItem.getId());
+				String text = "菜品优惠 菜名:" + orderItem.getDishName() + ",优惠名称: ";
 				if (discountRule != null) {
 					text += discountRule.getName() + ",折扣率:"
 							+ discountRule.getDiscountRate() + ",抵扣金额:"

@@ -282,7 +282,7 @@
 				<db.url>jdbc:mysql://localhost:3306/catering_db</db.url>
 				<!--<db.url>jdbc:mysql://localhost:3306/catering_db</db.url> -->
 
-				<db.password>helen520</db.password>
+				<db.password>abcd-zxcv</db.password>
 				<db.username>root</db.username>
 				<db.com>19889</db.com>
 				<log.info.filepath>logs/info.log</log.info.filepath>

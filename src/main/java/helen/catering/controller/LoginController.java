@@ -37,17 +37,19 @@ public class LoginController {
 	Employee employeeLogin(@PathVariable long storeId,
 			@RequestParam String workNumber, @RequestParam String password)
 			throws ServiceException {
+		Employee employee = null;
 
 		if (workNumber == "" && password != "") {
-			return _userService.getEmployeeByStoreIdAndSmartCardNo(storeId,
+			employee = _userService.getEmployeeByStoreIdAndSmartCardNo(storeId,
 					password);
-		}
+		} else
+			employee = _userService.getEmployeeByStoreIdAndWorkNumber(storeId,
+					workNumber);
 
-		Employee employee = _userService.getEmployeeByStoreIdAndWorkNumber(
-				storeId, workNumber);
 		if (employee == null) {
 			throw new ServiceException(ServiceException.LOGIN_FAILED);
 		}
+
 		UserAccount ua = _userService.getUserAccountById(employee
 				.getUserAccountId());
 		if (!ua.getPassword().trim().equals(password.trim())) {
@@ -84,7 +86,8 @@ public class LoginController {
 				.getUserByName(user.getUsername());
 
 		if (userAccount == null)
-			throw new ServiceException(ServiceException.LOGIN_FAILED_MORE_THAN_ONE);
+			throw new ServiceException(
+					ServiceException.LOGIN_FAILED_MORE_THAN_ONE);
 
 		Store store = _storeDataService.getStoreById(userAccount.getStoreId());
 		if (store.getIsInstantPay() && !store.getIsNormal()) {

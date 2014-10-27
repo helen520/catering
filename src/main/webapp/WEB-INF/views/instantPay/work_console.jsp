@@ -24,6 +24,7 @@
 <script type="text/javascript" src="../js/vendor/jquery-1.10.1.min.js"></script>
 <script type="text/javascript">
 	var $storeId = 0;
+	var ls = '';
 	$(function() {
 		var index = window.location.pathname.lastIndexOf("/");
 		$storeId = window.location.pathname.substring(index + 1);
@@ -168,6 +169,8 @@
 		src="../js/instantPay/customer_info_picker.js" charset="utf-8"></script>
 	<script type="text/javascript" src="../js/instantPay/dialogs.js"></script>
 	<script type="text/javascript"
+		src="../js/instantPay/ui_data_manager.js" charset="utf-8"></script>
+	<script type="text/javascript"
 		src="../js/instantPay/dish_order_cache.js"></script>
 	<script type="text/javascript"
 		src="../js/instantPay/dish_order_list_view.js"></script>
@@ -185,11 +188,9 @@
 		src="../js/instantPay/jquery.i18n.properties.js"></script>
 	<script type="text/javascript"
 		src="../js/instantPay/order_item_list.js" charset="utf-8"></script>
-	<script type="text/javascript"
-		src="../js/instantPay/ui_data_manager.js" charset="utf-8"></script>
 	<script type="text/javascript" src="../js/instantPay/work_console.js"
 		charset="utf-8"></script>
-	<script type="text/javascript" src="../js/shiftClass.js"
-		charset="utf-8"></script>
+	<script type="text/javascript"
+		src="../js/instantPay/customer_manager.js" charset="utf-8"></script>
 </body>
 </html>

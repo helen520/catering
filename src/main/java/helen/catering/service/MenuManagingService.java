@@ -543,7 +543,8 @@ public class MenuManagingService {
 	public Store updateStore(long id, long checkoutPosPrinterId,
 			boolean autoPrintCustomerNote, boolean noShowPriceInCustomerNote,
 			double pointRate, boolean includedCouponValueInPoint,
-			boolean isDoubleSizeFont, String storeActivity) {
+			boolean isDoubleSizeFont, boolean printsSerialNumber,
+			String storeActivity) {
 		try {
 			Store store = _storeDao.find(id);
 			store.setCheckoutPosPrinterId(checkoutPosPrinterId);
@@ -552,6 +553,7 @@ public class MenuManagingService {
 			store.setPointRate(pointRate);
 			store.setIncludedCouponValueInPoint(includedCouponValueInPoint);
 			store.setIsDoubleSizeFont(isDoubleSizeFont);
+			store.setPrintsSerialNumber(printsSerialNumber);
 			store.setStoreActivity(storeActivity);
 			_storeDao.save(store);
 			return store;

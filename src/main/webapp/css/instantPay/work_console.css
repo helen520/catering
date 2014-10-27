@@ -178,11 +178,11 @@ body {
 }
 
 ::-webkit-scrollbar-button:start {
-	background-image: url("/rice4/static/images/page_up.png");
+	background-image: url("../../images/page_up.png");
 }
 
 ::-webkit-scrollbar-button:end {
-	background-image: url("/rice4/static/images/page_down.png");
+	background-image: url("../../images/page_down.png");
 }
 
 ::-webkit-scrollbar-thumb {

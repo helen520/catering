@@ -1,6 +1,7 @@
 (function($) {
 
-	$.fn.digitKeyboard = function(title, isPasswordKeyboard, initValue, unit) {
+	$.fn.digitKeyboard = function(title, isPasswordKeyboard, initValue, unit,
+			isHex) {
 
 		var keyboard = this;
 		var captionContainer = $("<div>").appendTo(keyboard);
@@ -23,16 +24,34 @@
 		var amountDiv = $('<div>').addClass("digitAmount");
 		$('<span>').css("background", "#6AA1D8").text(text).appendTo(amountDiv);
 
+		var unitDiv = $('<div>').addClass("digitUnit");
 		if (unitText != "") {
 			amountDiv.css("width", "55%").css("float", " left;");
-			$('<div>').attr("id", "digitUnit").addClass("digitUnit").text(
-					unitText).appendTo(amountAndUnitDiv);
+			unitDiv.text(unitText).appendTo(amountAndUnitDiv);
 		}
 		amountDiv.appendTo(amountAndUnitDiv);
 
 		$('<div>').css("clear", " both").appendTo(captionContainer);
 
 		var keyDiv = $('<div>').appendTo(this);
+
+		if (isHex) {
+			$('<div>').text("A").attr("name", "keyButton").click(btnClick)
+					.appendTo(keyDiv);
+			$('<div>').text("B").attr("name", "keyButton").click(btnClick)
+					.appendTo(keyDiv);
+			$('<div>').text("C").attr("name", "keyButton").click(btnClick)
+					.appendTo(keyDiv);
+			$('<div>').css("clear", "both").appendTo(keyDiv);
+			$('<div>').text("D").attr("name", "keyButton").click(btnClick)
+					.appendTo(keyDiv);
+			$('<div>').text("E").attr("name", "keyButton").click(btnClick)
+					.appendTo(keyDiv);
+			$('<div>').text("F").attr("name", "keyButton").click(btnClick)
+					.appendTo(keyDiv);
+			$('<div>').css("clear", "both").appendTo(keyDiv);
+		}
+
 		var btn = 1;
 		for (var i = 0; i < 3; i++) {
 			for (var j = 0; j < 3; j++) {
@@ -46,7 +65,7 @@
 				.appendTo(keyDiv);
 		$('<div>').text("0").attr("name", "keyButton").click(btnClick)
 				.appendTo(keyDiv);
-		$('<div>').text("C").attr("name", "keyButton").click(
+		$('<div>').text("<=").attr("name", "keyButton").click(
 				function() {
 					text = "0";
 					amountDiv.text("");
@@ -68,6 +87,10 @@
 				newText = textChangeToPassword(newText);
 			}
 			return amountDiv.text(text);
+		};
+
+		this.setUnit = function(unit) {
+			unitDiv.text(unit)
 		};
 
 		return this;

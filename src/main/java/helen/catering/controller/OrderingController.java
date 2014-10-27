@@ -3,6 +3,7 @@ package helen.catering.controller;
 import helen.catering.model.FinanceStat;
 import helen.catering.model.entities.Coupon;
 import helen.catering.model.entities.DishOrder;
+import helen.catering.model.entities.OrderItem;
 import helen.catering.model.entities.PayRecord;
 import helen.catering.model.entities.UserAccount;
 import helen.catering.service.BalanceOperationLogService;
@@ -121,10 +122,17 @@ public class OrderingController {
 		DishOrder orgDishOrder = _orderingService.getDishOrderById(dishOrder
 				.getId());
 
-		if (orgDishOrder == null
-				|| orgDishOrder.getState() == DishOrder.STATE_PAID) {
-			return null;
+		if (orgDishOrder == null) {
+			orgDishOrder = _orderingService.createDishOrder(employeeId,
+					dishOrder.getDeskId(), dishOrder.getSerialNumber(),
+					dishOrder.getCustomerCount());
+			_operationLogService.createDishOrder(employeeId, orgDishOrder,
+					dishOrder.getDeskId(), dishOrder.getCustomerCount());
+			dishOrder.setId(orgDishOrder.getId());
 		}
+
+		if (orgDishOrder.getState() == DishOrder.STATE_PAID)
+			return null;
 
 		DishOrder resultDishOrder = _orderingService.payDishOrder(employeeId,
 				dishOrder);
@@ -144,7 +152,8 @@ public class OrderingController {
 		_userService.AssertEmployeeAuth(employeeId);
 		DishOrder result = _orderingService.applyDiscountRule(employeeId,
 				dishOrderId, orderItemId, discountRuleId);
-		_operationLogService.applyDiscountRule(employeeId, result, orderItemId,
+		OrderItem orderItem = _orderingService.getOrderItemById(orderItemId);
+		_operationLogService.applyDiscountRule(employeeId, result, orderItem,
 				discountRuleId);
 
 		return result;

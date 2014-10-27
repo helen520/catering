@@ -34,12 +34,9 @@ function AuthorityManager() {
 	this.getCurrentEmployee = function() {
 		return _currentEmployee;
 	};
+
 	this.setCurrentEmployee = function(employee) {
 		_currentEmployee = employee;
-		if (!employee) {
-			session_id = null;
-			$.removeCookie('rice4_session_id');
-		}
 		fireEvent('onCurrentEmployeeChanged', _currentEmployee);
 	};
 
@@ -54,7 +51,7 @@ function AuthorityManager() {
 		return false;
 	};
 
-	this.getAuthority = function(privilege, okCallback) {
+	this.getAuthority = function(privilege, okCallback, isAuthority) {
 		if (longSession && checkPrivilege(_currentEmployee, privilege)) {
 			if (okCallback) {
 				okCallback();
@@ -63,10 +60,10 @@ function AuthorityManager() {
 			return;
 		}
 
-		new EmployeeLoginDialog(function(employee, sessionInfo) {
-			self.setCurrentEmployee(employee);
-			session_id = sessionInfo.session_id;
-			$.cookie('rice4_session_id', session_id);
+		new EmployeeLoginDialog(function(employee, isAuthority) {
+
+			if (!isAuthority)
+				self.setCurrentEmployee(employee);
 
 			if (checkPrivilege(employee, privilege)) {
 				if (okCallback) {

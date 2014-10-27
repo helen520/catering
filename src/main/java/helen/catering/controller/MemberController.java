@@ -11,6 +11,7 @@ import helen.catering.model.entities.UserAccount;
 import helen.catering.service.BalanceOperationLogService;
 import helen.catering.service.CouponOperationLogService;
 import helen.catering.service.DishOrderPrintingService;
+import helen.catering.service.ServiceException;
 import helen.catering.service.StoreDataService;
 import helen.catering.service.UserService;
 
@@ -570,19 +571,16 @@ public class MemberController {
 	@ResponseBody
 	@RequestMapping(value = "getMemberListByPhoneOrCardNo")
 	public List<UserAccount> getMemberListByPhoneOrCardNo(
-			@RequestParam String submitStr, @RequestParam long storeId) {
+			@RequestParam String keyword, @RequestParam long storeId) {
 
 		List<UserAccount> userAccounts = new ArrayList<UserAccount>();
 
-		if (submitStr == "") {
+		if (keyword == "") {
 			return userAccounts;
 		}
 
-		if (submitStr.equals("all")) {
-			userAccounts = _userService.getAllMemberListByStoreId(storeId);
-		} else
-			userAccounts = _userService.getMemberListByPhoneOrCardNo(submitStr,
-					storeId);
+		userAccounts = _userService.getMemberListByPhoneOrCardNo(keyword,
+				storeId);
 
 		return userAccounts;
 	}
@@ -623,7 +621,9 @@ public class MemberController {
 	@RequestMapping("sendCoupons")
 	public List<CouponTemplate> sendCoupons(@RequestParam long userAccountId,
 			@RequestParam long storeId, @RequestParam long employeeId,
-			@RequestParam String couponTemplatesJsonText) {
+			@RequestParam String couponTemplatesJsonText) throws Exception {
+		_userService.AssertEmployeeAuth(employeeId);
+
 		List<CouponTemplate> couponTemplates = CouponTemplate
 				.fromJsonText(couponTemplatesJsonText);
 
@@ -663,5 +663,47 @@ public class MemberController {
 			}
 		}
 		return couponTemplates;
+	}
+
+	@ResponseBody
+	@RequestMapping("sendCouponsByCouponTemplateId")
+	public List<Coupon> sendCouponsByCouponTemplateId(
+			@RequestParam long userAccountId,
+			@RequestParam long couponTemplateId, @RequestParam long employeeId,
+			@RequestParam long storeId) throws Exception {
+		_userService.AssertEmployeeAuth(employeeId);
+
+		CouponTemplate couponTemplate = _userService
+				.getCouponTemplateById(couponTemplateId);
+
+		if (couponTemplate != null) {
+			Coupon coupon = new Coupon();
+			coupon.setTitle(couponTemplate.getTitle());
+			coupon.setValue(couponTemplate.getValue());
+			coupon.setText(couponTemplate.getText());
+			coupon.setUserAccount(userAccountId);
+			coupon.setStoreId(storeId);
+			coupon.setState(Coupon.STATE_ENABLED);
+			if (couponTemplate.getSubTitle() != null) {
+				coupon.setSubTitle(couponTemplate.getSubTitle());
+			}
+			if (couponTemplate.getValidFromNow()) {
+				coupon.setStartDate(System.currentTimeMillis());
+				long dayTime = 24 * 60 * 60 * 1000;
+				long validDayTime = couponTemplate.getValidDays() * dayTime;
+				coupon.setEndDate(System.currentTimeMillis() + validDayTime);
+			} else {
+				coupon.setStartDate(couponTemplate.getStartDate());
+				coupon.setEndDate(couponTemplate.getEndDate());
+			}
+
+			_userService.saveCoupon(coupon);
+			_couponOperationLogService.sendCoupon(storeId, employeeId,
+					userAccountId, coupon);
+		}
+
+		List<Coupon> coupons = _userService.getCouponsByUserIdAndStoreId(
+				userAccountId, storeId);
+		return coupons;
 	}
 }

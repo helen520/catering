@@ -7,6 +7,7 @@ import helen.catering.model.entities.OrderItem;
 import helen.catering.model.entities.OrderItemTag;
 import helen.catering.model.entities.PayRecord;
 import helen.catering.model.entities.UserAccount;
+import helen.catering.service.OperationLogService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +15,15 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class DishOrderDao {
+
+	@Autowired
+	OperationLogService _operationLogService;
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -76,6 +81,11 @@ public class DishOrderDao {
 					if (oi.getId() == 0) {
 						oi.setId(Utils.generateEntityId(i++));
 						oi.setCreateTime(System.currentTimeMillis() + i);
+
+						if (oi.getDiscountRuleId() != null)
+							_operationLogService.applyDiscountRule(
+									dishOrder.getEditorEmployeeId(), dishOrder,
+									oi, oi.getDiscountRuleId());
 					}
 					oi.setDishOrder(dishOrder);
 					oi.setDeskName(dishOrder.getDeskName());
@@ -408,7 +418,7 @@ public class DishOrderDao {
 	public List<DishOrder> getDishOrderByEmployeeId(long employeeId) {
 		return entityManager
 				.createQuery(
-						"select do from DishOrder do where do.creatorEmployeeId = ? and do.state = ? order by createTime")
+						"select do from DishOrder do where do.creatorEmployeeId = ? and do.state = ? order by createTime desc")
 				.setParameter(1, employeeId)
 				.setParameter(2, DishOrder.STATE_PAID).getResultList();
 	}

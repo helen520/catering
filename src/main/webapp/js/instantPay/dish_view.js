@@ -66,6 +66,9 @@ function DishView(container) {
 				updateDishOrderInfo);
 		authorityManager.attachEvent('onCurrentEmployeeChanged',
 				updateLoginInfo);
+		uiDataManager.attachEvent('onMenuChanged', function() {
+			dishPicker.refreshUI();
+		});
 
 		$("#cancelDishOrderButton", container).click(function() {
 			new ConfirmDialog("警告", "确定取消点菜？", okCallback).show();
@@ -96,12 +99,10 @@ function DishView(container) {
 					}).show();
 				});
 		$("#switchToCheckoutViewButton", container).click(function() {
-			authorityManager.getAuthority('canPayDishOrder', function() {
-				fireEvent('onSwitchViewCommand', 'CHECKOUT_VIEW');
-			});
+			fireEvent('onSwitchViewCommand', 'CHECKOUT_VIEW');
 		});
 		$("#logoutEmployeeButton", container).click(function() {
-			authorityManager.setCurrentEmployee(null);
+			window.location.href = '../j_spring_security_logout';
 		});
 
 		var cmdButtonContainer = $("#dishOrderItemCmdPanel", container);

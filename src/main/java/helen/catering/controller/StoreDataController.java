@@ -1,5 +1,6 @@
 package helen.catering.controller;
 
+import helen.catering.model.DishCategoryBrief;
 import helen.catering.model.DynamicDataBrief;
 import helen.catering.model.ReportData;
 import helen.catering.model.StoreData;
@@ -11,6 +12,7 @@ import helen.catering.service.ServiceException;
 import helen.catering.service.StoreDataService;
 import helen.catering.service.UserService;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -75,6 +77,14 @@ public class StoreDataController {
 		return _storeDataService.getDynamicDataBriefById(storeId, lastMenuHash,
 				lastActiveDishOrderSetHash, lastBookingRecordsHash,
 				lastSelfDishOrdersHash);
+	}
+
+	@ResponseBody
+	@RequestMapping("getdDishCategoryHashDictDynamicData/{storeId}")
+	public HashMap<Long, DishCategoryBrief> getdDishCategoryHashDictDynamicData(
+			@PathVariable long storeId) {
+
+		return _storeDataService.getdDishCategoryHashDictDynamicData(storeId);
 	}
 
 	@ResponseBody

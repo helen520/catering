@@ -560,10 +560,12 @@ public class DishMenuManagementController {
 			@RequestParam(defaultValue = "1") double pointRate,
 			@RequestParam(defaultValue = "false") boolean includedCouponValueInPoint,
 			@RequestParam(defaultValue = "false") boolean isDoubleSizeFont,
+			@RequestParam(defaultValue = "false") boolean printsSerialNumber,
 			@RequestParam(defaultValue = "") String storeActivity) {
 		return this._menuManagingService.updateStore(id, checkoutPosPrinterId,
 				autoPrintCustomerNote, noShowPriceInCustomerNote, pointRate,
-				includedCouponValueInPoint, isDoubleSizeFont, storeActivity);
+				includedCouponValueInPoint, isDoubleSizeFont,
+				printsSerialNumber, storeActivity);
 	}
 
 	@ResponseBody

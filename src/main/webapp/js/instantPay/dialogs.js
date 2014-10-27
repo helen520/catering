@@ -64,6 +64,8 @@ function PickCustomerDialog(onCustomerSelectedCallBack) {
 	var dialogDiv = $('<div>');
 	var modal = null;
 
+	var customerManager = CustomerManager.getInstance();
+
 	var closeModal = function() {
 		if (modal) {
 			modal.close();
@@ -94,21 +96,17 @@ function PickCustomerDialog(onCustomerSelectedCallBack) {
 		var searchInput = $('<input>').addClass(
 				"ui-input ui-border-solid ui-shadow ui-radius searchInput")
 				.appendTo(searchInputPanel);
-
-		var titleOperatePanel = $('<div>').addClass("titleOperatePanel")
-				.appendTo(titlePanel);
 		$('<button>').addClass("showDishOrderAllButton button right").text(
-				$.i18n.prop('string_souSuo')).click(searchButtonClick)
-				.appendTo(titleOperatePanel);
+				$.i18n.prop('string_Search')).click(searchButtonClick)
+				.appendTo(searchInputPanel);
 
 		function searchButtonClick() {
 			var keyword = searchInput.val();
 			if (!isNaN(keyword) && Number(keyword) != 0) {
 				customerListPanel.empty();
-				UnibizProxy.getInstance().searchCustomer(keyword,
-						function(customers) {
-							renderCustomers(customers);
-						});
+				customerManager.searchCustomer(keyword, function(customers) {
+					renderCustomers(customers);
+				});
 			} else {
 				alert($.i18n.prop('string_InputError'));
 			}
@@ -128,7 +126,7 @@ function PickCustomerDialog(onCustomerSelectedCallBack) {
 					"dishOrderOperationPanel").appendTo(customerDiv);
 
 			var customerCaptionHtml = $.i18n.prop('string_MembershipCardNo')
-					+ ":" + $.trim(customer.membership_card_no);
+					+ ":" + $.trim(customer.membershipCardNo);
 			customerCaptionHtml += $.i18n.prop('string_Name') + ":"
 					+ customer.name;
 			customerCaptionHtml += $.i18n.prop('string_Mobile') + ":"
@@ -960,12 +958,24 @@ function NamedValueDialog(type, initValue, okCallback) {
 				.addClass("overthrow").appendTo(dialogDiv);
 
 		var rates = [];
+		var defaultRate = {};
 		if (type == 'Discount Rate') {
-			rates = uiDataManager.getStoreData().discountRates;
+			rates = jQuery.extend([],
+					uiDataManager.getStoreData().discountRates);
+			defaultRate = {
+				name : "无",
+				value : 1
+			};
 		}
 		if (type == 'Service Fee Rate') {
-			rates = uiDataManager.getStoreData().serviceFeeRates;
+			rates = jQuery.extend([],
+					uiDataManager.getStoreData().serviceFeeRates);
+			defaultRate = {
+				name : "无",
+				value : 0
+			};
 		}
+		rates.push(defaultRate);
 
 		for ( var i in rates) {
 			var rate = rates[i];
@@ -1669,7 +1679,7 @@ function SelectMealDealDishDialog(orderItem, okCallBack) {
 	init();
 }
 
-function EmployeeLoginDialog(okCallback) {
+function EmployeeLoginDialog(okCallback, isAuthority) {
 
 	var model = null;
 	var dialogDiv = $("<div>");
@@ -1684,51 +1694,49 @@ function EmployeeLoginDialog(okCallback) {
 	};
 
 	var smartCardNo = '';
+	var passwordKb = null;
 
-	var authenticateAjaxDone = function(response) {
-		if (response.error) {
-			new AlertDialog($.i18n.prop('string_SystemMessage'), $.i18n
-					.prop('string_Error')).show();
-			return;
-		}
+	var authenticateAjax = function(workNumber, password) {
 
-		var employee = DataMapper.mapServerEntity('Employee',
-				response.result.employee);
-		var sessionInfo = response.result.session_info;
-		if (!sessionInfo.uid) {
-			new AlertDialog($.i18n.prop('string_SystemMessage'),
-					"登录失败，请检查用户名及密码.").show();
-		} else {
-			if (okCallback) {
-				okCallback(employee, sessionInfo);
+		var postData = {
+			workNumber : workNumber,
+			password : password,
+		};
+
+		$.ajax({
+			type : 'POST',
+			url : "../employeeLogin/" + $storeId,
+			data : postData,
+			dataType : "json",
+			error : function(error) {
+				new AlertDialog($.i18n.prop('string_Notice'), $.i18n
+						.prop('string_LoginError')).show();
+			},
+			success : function(employee) {
+				if (okCallback) {
+					okCallback(employee, isAuthority);
+				}
+				closeModel();
 			}
-			closeModel();
-		}
+		});
 	};
 
 	var keyDown = function(e) {
-		e.preventDefault();
+		// e.preventDefault();
 		var keycode = event.keyCode;
 		var realkey = String.fromCharCode(event.keyCode);
 
 		if (keycode != 13) {
 			smartCardNo += realkey;
+			passwordKb.setText(passwordKb.getText() + "*");
 		} else {
 			if (smartCardNo == '') {
 				return;
 			}
-			var payload = getJsonRPCPayload();
-			payload.params.db = db;
-			payload.params.smart_card_no = smartCardNo;
-			ajax = getDefaultAjax(payload, rpc_urls.smart_card_authenticate);
-
-			$.ajax(ajax).done(authenticateAjaxDone).fail(
-					function() {
-						new AlertDialog($.i18n.prop('string_SystemMessage'),
-								$.i18n.prop('string_Error')).show();
-					});
+			authenticateAjax("", smartCardNo);
 
 			smartCardNo = '';
+			passwordKb.setText("");
 		}
 	};
 
@@ -1740,7 +1748,7 @@ function EmployeeLoginDialog(okCallback) {
 				.digitKeyboard($.i18n.prop('string_WorkNumber') + ": ");
 		$("<div>").addClass("floatLeft").css("width", "1em")
 				.appendTo(dialogDiv);
-		var passwordKb = $("<div>").addClass("floatRight").appendTo(dialogDiv)
+		passwordKb = $("<div>").addClass("floatRight").appendTo(dialogDiv)
 				.digitKeyboard($.i18n.prop('string_Password') + ": ", true);
 		workNumberKb.setText("");
 		passwordKb.setText("");
@@ -1749,43 +1757,11 @@ function EmployeeLoginDialog(okCallback) {
 		var bottomDiv = $("<div>").css("text-align", "center").appendTo(
 				dialogDiv);
 
-		var cardLoginButton = $("<div>").addClass("dialogButton").text('刷卡登录')
-				.css("margin-right", "3em").click(cardLoginButtonClick);
-		function cardLoginButtonClick() {
-			var cardNo = RICE4Native.readCard();
-
-			var payload = getJsonRPCPayload();
-			payload.params.db = db;
-			payload.params.smart_card_no = cardNo;
-			ajax = getDefaultAjax(payload, rpc_urls.smart_card_authenticate);
-
-			$.ajax(ajax).done(authenticateAjaxDone).fail(
-					function() {
-						new AlertDialog($.i18n.prop('string_SystemMessage'),
-								$.i18n.prop('string_Error')).show();
-					});
-		}
-
-		if (typeof (RICE4Native) != 'undefined') {
-			cardLoginButton.appendTo(bottomDiv);
-		}
-
 		$("<div>").addClass("dialogButton").text($.i18n.prop('string_Login'))
 				.css("margin-right", "3em").click(loginButtonClick).appendTo(
 						bottomDiv);
 		function loginButtonClick() {
-			var payload = getJsonRPCPayload();
-			payload.params.db = db;
-			payload.params.work_number = workNumberKb.getText();
-			payload.params.password = passwordKb.getText();
-
-			ajax = getDefaultAjax(payload, rpc_urls.employee_authenticate);
-
-			$.ajax(ajax).done(authenticateAjaxDone).fail(
-					function() {
-						new AlertDialog($.i18n.prop('string_SystemMessage'),
-								$.i18n.prop('string_Error')).show();
-					});
+			authenticateAjax(workNumberKb.getText(), passwordKb.getText());
 		}
 
 		$('<div>').addClass("dialogButton").text($.i18n.prop('string_Cancel'))

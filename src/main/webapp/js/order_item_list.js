@@ -219,7 +219,9 @@ function OrderItemList(bindingDishId, cmdButtonContainer, listContainer,
 			amountButton.click(function() {
 				if (orderItem.amount >= 1) {
 					orderItem.amount -= 1;
-				}
+					orderItem.amount = Math.round(orderItem.amount * 10) / 10;
+				} else
+					orderItem.amount = 0;
 				render();
 				select(index);
 				if (orderItemChangedCallback) {
@@ -766,7 +768,7 @@ function OrderItemList(bindingDishId, cmdButtonContainer, listContainer,
 				if (selected) {
 					showAmountDialog($.i18n.prop('string_shuLiang'),
 							function okCallback(result) {
-								curOrderItemTag.amount = result;
+								curOrderItemTag.amount = result.toFixed(1);
 								updateTagText();
 							}, curOrderItemTagAmount);
 
@@ -965,6 +967,12 @@ function OrderItemList(bindingDishId, cmdButtonContainer, listContainer,
 					}
 					okCallback();
 				}).appendTo(bottomDiv);
+		$("<a>").text($.i18n.prop('string_quXiao')).addClass(
+				"dishOrderCmdButton").click(function() {
+			if (okCallback)
+				okCallback();
+
+		}).appendTo(bottomDiv);
 		return discountRulePanel;
 	}
 

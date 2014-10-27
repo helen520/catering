@@ -286,7 +286,7 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories,
 		var selectedDesk = null;
 
 		if ($curDishOrder) {
-			$deskMap[$curDishOrder.deskId];
+			selectedDesk = $deskMap[$curDishOrder.deskId];
 		}
 
 		var orgDishButtons = listContainer.children();
@@ -333,8 +333,10 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories,
 					Number(i) + 1 + "." + dish.name).appendTo(dishButton);
 			var dishPriceAndUnitHtml = "&yen;" + dish.price;
 
-			dishPriceAndUnitHtml += dish.vipfee > 0
-					&& selectedDesk.chargeVIPFee > 0 ? "+" + dish.vipfee : '';
+			if (selectedDesk)
+				dishPriceAndUnitHtml += dish.vipfee > 0
+						&& selectedDesk.chargeVIPFee > 0 ? "+" + dish.vipfee
+						: '';
 			dishPriceAndUnitHtml += (dish.unit != null ? "[" + dish.unit + "]"
 					: "");
 			dishPriceAndUnitHtml += dish.noDiscount ? "&nbsp;*" : '';
@@ -348,6 +350,7 @@ function DishPicker(dishPickerContainer, dishSelectedCallback, hideCategories,
 					if (orderItem.id == 0 && orderItem.dishId == dish.id
 							&& orderItem.mealDealItemId == null) {
 						clientOrderItem = orderItem;
+						break;
 					}
 				}
 			}

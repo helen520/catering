@@ -35,6 +35,7 @@ import helen.catering.model.entities.TimeRange;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -242,6 +243,27 @@ public class StoreDataService {
 		}
 
 		return ddb;
+	}
+
+	public HashMap<Long, DishCategoryBrief> getdDishCategoryHashDictDynamicData(
+			long storeId) {
+
+		HashMap<Long, DishCategoryBrief> dcbListHashMap = new HashMap<Long, DishCategoryBrief>();
+		List<Menu> menuList = _menuDao.getMenusByStoreId(storeId);
+		for (Menu menu : menuList) {
+
+			Collections.sort(menu.getDishCategories());
+			for (DishCategory dc : menu.getDishCategories()) {
+				dc.updateJsonHash();
+
+				DishCategoryBrief dcb = new DishCategoryBrief();
+				dcb.setDishCategoryId(dc.getId());
+				dcb.setJsonHash(dc.getJsonHash());
+
+				dcbListHashMap.put(dc.getId(), dcb);
+			}
+		}
+		return dcbListHashMap;
 	}
 
 	public List<Object> getActiveDishOrderDynamicData(long storeId,

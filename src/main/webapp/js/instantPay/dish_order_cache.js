@@ -27,7 +27,7 @@ function DishOrderCache() {
 	var myDishOrders = [];
 	var autoUpdateActiveDishOrders = false;
 	var lastActiveDishOrderSetHash = 0;
-	var uiDataManager = UIDatamanager.getInstance();
+	var uiDataManager = UIDataManager.getInstance();
 
 	var dishOrderMap = {};
 	this.getDishOrderById = function(id) {
@@ -175,8 +175,9 @@ function DishOrderCache() {
 					myDishOrders = dishOrders;
 					var dishOrders = self.getMyDishOrders();
 					fireEvent('onMyDishOrderSetChanged', dishOrders);
-				}
-				showAlertDialog($.i18n.prop('string_cuoWu'), "更新订单出错!请刷新后重试!");
+				} else
+					new AlertDialog($.i18n.prop('string_cuoWu'),
+							"更新订单出错!请刷新后重试!").show();
 			}
 		};
 		$.ajax(ajaxRequest);
@@ -216,21 +217,26 @@ function DishOrderCache() {
 	};
 
 	this.getPaidDishOrders = function(successCallback) {
-		var payload = getJsonRPCPayload();
-		var ajaxReq = getDefaultAjax(payload, rpc_urls.get_paid_dish_orders);
-		$.ajax(ajaxReq).done(function(response) {
-			var dishOrders = [];
-			if (!response.result) {
-				return;
-			}
+		$.ajax({
+			type : 'POST',
+			url : "../ordering/getDishOrderList",
+			data : {
+				dishOrderBriefId : 0,
+				storeId : $storeId,
+				isSearchBookingDishOrder : false,
+				isSearchBookingDishOrderByDate : false,
+			},
+			error : function() {
+				new AlertDialog($.i18n.prop('string_SystemMessage'), $.i18n
+						.prop('string_Error')).show();
+			},
+			success : function(dishOrders) {
+				if (!dishOrders)
+					return;
 
-			for ( var i in response.result) {
-				var dishOrder = response.result[i];
-				dishOrders.push(DishOrder.mapServerDishOrder(dishOrder));
-			}
+				if (successCallback)
+					successCallback(dishOrders);
 
-			if (successCallback) {
-				successCallback(dishOrders);
 			}
 		});
 	};

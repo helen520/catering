@@ -86,6 +86,9 @@ public class Store implements Serializable {
 	private boolean noShowPriceInCustomerNote;
 
 	@Column
+	private boolean printsSerialNumber;
+
+	@Column
 	private String unibizURL;
 
 	@Column
@@ -296,6 +299,14 @@ public class Store implements Serializable {
 
 	public void setNoShowPriceInCustomerNote(boolean noShowPriceInCustomerNote) {
 		this.noShowPriceInCustomerNote = noShowPriceInCustomerNote;
+	}
+
+	public boolean getPrintsSerialNumber() {
+		return printsSerialNumber;
+	}
+
+	public void setPrintsSerialNumber(boolean printsSerialNumber) {
+		this.printsSerialNumber = printsSerialNumber;
 	}
 
 	public String getUnibizURL() {

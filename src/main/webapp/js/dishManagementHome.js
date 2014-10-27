@@ -774,6 +774,8 @@ $(function() {
 							$curStore.includedCouponValueInPoint);
 					$("#storeIsDoubleSizeFont").prop("checked",
 							$curStore.isDoubleSizeFont);
+					$("#storePrintsSerialNumber").prop("checked",
+							$curStore.printsSerialNumber);
 					$("#storeActivity").val($curStore.storeActivity);
 
 					showFormDialog("#addOrUpdateStoreDialogTemplate",
@@ -3383,6 +3385,7 @@ function submitStore() {
 	var pointRate = this.form.storePointRate.value;
 	var includedCouponValueInPoint = this.form.storeIncludedCouponValueInPoint.checked;
 	var isDoubleSizeFont = this.form.storeIsDoubleSizeFont.checked;
+	var printsSerialNumber = this.form.storePrintsSerialNumber.checked;
 	var storeActivity = this.form.storeActivity.value;
 
 	$.ajax({
@@ -3396,6 +3399,7 @@ function submitStore() {
 			pointRate : pointRate,
 			includedCouponValueInPoint : includedCouponValueInPoint,
 			isDoubleSizeFont : isDoubleSizeFont,
+			printsSerialNumber : printsSerialNumber,
 			storeActivity : storeActivity
 		},
 		dataType : "json",

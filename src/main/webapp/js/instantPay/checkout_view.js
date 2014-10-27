@@ -7,6 +7,9 @@ if (window.location.search.indexOf('debug') > 0) {
 		},
 		getCheckoutBillPrinterId : function() {
 			return 1;
+		},
+		getCustomerNotePrinterId : function() {
+			return 1;
 		}
 	};
 }
@@ -78,7 +81,7 @@ function CheckoutView(container) {
 					function payCallback(depositCard) {
 						var dishOrder = dishOrderManager.getCurrentDishOrder();
 						var payRecord = PayRecord.newFromDepositCard(
-								depositCard, dishOrder.finalPrice);
+								depositCard, dishOrder.remainToPay);
 						dishOrderManager.addPayRecord(payRecord);
 					}
 				});
@@ -88,8 +91,8 @@ function CheckoutView(container) {
 			var paymentType = uiDataManager.getStoreData().paymentTypes[i];
 			var paymentTypeDiv = $('<div>').text(paymentType.name).data(
 					'paymentType', paymentType).addClass("button").css(
-					"margin", "1em").click(paymentTypeButtonClick).appendTo(
-					paymentTypeList);
+					"margin", "0.3em 0.6em 0.3em 0.6em").click(
+					paymentTypeButtonClick).appendTo(paymentTypeList);
 			function paymentTypeButtonClick() {
 				var dishOrder = dishOrderManager.getCurrentDishOrder();
 				var paymentType = $(this).data('paymentType');
@@ -116,7 +119,9 @@ function CheckoutView(container) {
 
 	this.show = function() {
 		var dishOrder = dishOrderManager.getCurrentDishOrder();
-		if (dishOrder && dishOrder.serialNumber == '0') {
+		var store = uiDataManager.getStore();
+		if (dishOrder && dishOrder.serialNumber == '0'
+				&& store.printsSerialNumber) {
 			new AmountDialog($.i18n.prop('string_SerialNumber'), '', function(
 					serialNumber) {
 				dishOrderManager.setSerialNumber(serialNumber);
@@ -221,6 +226,8 @@ function CheckoutView(container) {
 						dishOrderManager.removePayRecord(payRecord);
 					});
 				}
+
+				$('<span>').text(payRecord.memo).appendTo(payRecordDiv);
 				payRecordDiv.appendTo(payRecordList);
 			}
 		}

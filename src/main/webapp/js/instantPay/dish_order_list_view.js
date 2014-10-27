@@ -22,7 +22,6 @@ function DishOrderListView(container) {
 		}
 	};
 
-	var uiDataManager = UIDataManager.getInstance();
 	var dishOrderManager = DishOrderManager.getInstance();
 	var authorityManager = AuthorityManager.getInstance();
 	var dishOrderCache = DishOrderCache.getInstance();
@@ -46,8 +45,14 @@ function DishOrderListView(container) {
 			});
 		});
 
-		$("#myDishOrdersButton", container).click(function() {
+		$('#functionMenuButton', container).click(function() {
 			authorityManager.getAuthority('canEditDishOrder', function() {
+				new FunctionMenuDialog().show();
+			});
+		});
+
+		$("#myDishOrdersButton", container).click(function() {
+			authorityManager.getAuthority('canRestoreDishOrder', function() {
 				dishOrderCache.loadMyDishOrders();
 			});
 		});
@@ -87,14 +92,14 @@ function DishOrderListView(container) {
 					dishOrderCaptionDiv.css('background-color', '#B5D9B3');
 				}
 
-				var restoreOrderButton = $("<button>").addClass("button").text(
+				$("<button>").addClass("button").text(
 						$.i18n.prop('string_Restore')).data("dishOrder",
 						dishOrder).click(restoreOrderButtonClick).appendTo(
 						dishOrderCaptionDiv);
 				function restoreOrderButtonClick() {
 					var dishOrder = $(this).data("dishOrder");
 
-					authorityManager.getAuthority('canPayDishOrder',
+					authorityManager.getAuthority('canRestoreDishOrder',
 							restoreDishOrder);
 					function restoreDishOrder() {
 						dishOrderCache.removeClientDishOrder(dishOrder);

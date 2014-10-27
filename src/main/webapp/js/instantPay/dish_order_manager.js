@@ -83,18 +83,6 @@ function DishOrderManager() {
 		return true;
 	};
 
-	var checkPayRecordExist = function(payRecord) {
-		var dishOrder = _currentDishOrder;
-		if (!dishOrder) {
-			return false;
-		}
-		if ($.inArray(payRecord, dishOrder.payRecords) == -1) {
-			return false;
-		}
-
-		return true;
-	};
-
 	var autoOrderMealDealItems = function(dish, dishOrder, triggerOrderItem) {
 
 		var mealDealItems = uiDataManager
@@ -195,51 +183,36 @@ function DishOrderManager() {
 			return;
 		}
 
-		if (typeof (RICE4Native) != 'undefined') {
-			if (RICE4Native.getCheckoutBillPrinterId
-					&& RICE4Native.getCheckoutBillPrinterId()) {
-				_currentDishOrder.checkoutBillPrinterId = RICE4Native
-						.getCheckoutBillPrinterId();
-			}
-			if (RICE4Native.getCustomerNotePrinterId
-					&& RICE4Native.getCustomerNotePrinterId()) {
-				_currentDishOrder.customerNotePrinterId = RICE4Native
-						.getCustomerNotePrinterId();
-			}
-		}
-
 		var dishOrderToSubmit = DishOrder
 				.getDishOrderToSubmit(_currentDishOrder);
 
 		var loadingDialog = new LoadingDialog($.i18n.prop('string_Submitting'));
 		loadingDialog.show();
 
-		var payload = getJsonRPCPayload();
-		payload.params.db = db;
-		payload.params.dish_order = dishOrderToSubmit;
-		var ajaxReq = getDefaultAjax(payload, rpcUrl);
-
-		$.ajax(ajaxReq).done(ajaxDone).fail(
-				function() {
-					loadingDialog.hide();
-					new AlertDialog($.i18n.prop('string_SystemMessage'), $.i18n
-							.prop('string_Error')).show();
-				});
-		function ajaxDone(response) {
-			loadingDialog.hide();
-			if (!response.result) {
+		$.ajax({
+			type : 'POST',
+			url : rpcUrl,
+			data : {
+				employeeId : uiDataManager.getStoreData().employee.id,
+				dishOrderJsonText : JSON.stringify(dishOrderToSubmit)
+			},
+			dataType : "json",
+			error : function() {
+				loadingDialog.hide();
 				new AlertDialog($.i18n.prop('string_SystemMessage'), $.i18n
 						.prop('string_Error')).show();
-				return;
-			}
+			},
+			success : function(dishOrder) {
+				loadingDialog.hide();
+				if (!dishOrder)
+					new AlertDialog($.i18n.prop('string_SystemMessage'), $.i18n
+							.prop('string_Error')).show();
 
-			var dishOrder = DishOrder.mapServerDishOrder(response.result);
-			self.setCurrentDishOrder(dishOrder);
-
-			if (successCallback) {
-				successCallback(dishOrder);
+				self.setCurrentDishOrder(dishOrder);
+				if (successCallback)
+					successCallback(dishOrder);
 			}
-		}
+		});
 	};
 
 	var mergeClientOrderItems = function(dishOrder) {
@@ -273,30 +246,40 @@ function DishOrderManager() {
 		var loadingDialog = new LoadingDialog($.i18n.prop('string_Loading'));
 		loadingDialog.show();
 
-		var payload = getJsonRPCPayload();
-		payload.params.dish_order_id = orderItem.dishOrderId;
-		payload.params.order_item_id = orderItem.id;
-		payload.params.amount = amount;
-		payload.params.cancel_reason = cancelReason;
+		var dishSoldOut = false;
+		if (cancelReason.name == "菜品沽清") {
+			dishSoldOut = true;
+		}
 
-		var ajaxReq = getDefaultAjax(payload, rpc_urls.cancel_order_item);
-
-		$.ajax(ajaxReq).done(function(response) {
-			if (response.error) {
-				return;
+		var postData = {
+			employeeId : uiDataManager.getStoreData().employee.id,
+			dishOrderId : _currentDishOrder.id,
+			orderItemId : orderItem.id,
+			amount : amount,
+			cancelReason : cancelReason.name,
+			dishSoldOut : dishSoldOut
+		};
+		$.ajax({
+			type : 'POST',
+			url : "../ordering/cancelOrderItem",
+			data : postData,
+			dataType : 'json',
+			error : function(error) {
+				loadingDialog.hide();
+				if (error.status == 403) {
+					new AlertDialog($.i18n.prop('string_SystemMessage'),
+							"权限不足,无法进行操作!").show();
+					return;
+				}
+				new AlertDialog($.i18n.prop('string_SystemMessage'),
+						error.responseText).show();
+			},
+			success : function(dishOrder) {
+				loadingDialog.hide();
+				mergeClientOrderItems(dishOrder);
+				self.setCurrentDishOrder(dishOrder);
 			}
-
-			var dishOrder = DishOrder.mapServerDishOrder(response.result);
-			loadingDialog.hide();
-
-			mergeClientOrderItems(dishOrder);
-			self.setCurrentDishOrder(dishOrder);
-		}).fail(
-				function() {
-					loadingDialog.hide();
-					new AlertDialog($.i18n.prop('string_SystemMessage'), $.i18n
-							.prop('string_Error')).show();
-				});
+		});
 	};
 
 	this.updateCurrentDishOrder = function() {
@@ -436,7 +419,8 @@ function DishOrderManager() {
 				customerCount : 1,
 				serialNumber : '0',
 				discountRate : 1,
-				serviceFeeRate : 0
+				serviceFeeRate : 0,
+				deskId : 0,
 			};
 
 			for (i in uiDataManager.getAutoOrderDishList()) {
@@ -526,10 +510,9 @@ function DishOrderManager() {
 	};
 
 	this.submitAndPayDishOrder = function() {
-		submitDishOrder(rpc_urls.submit_and_pay_dish_order,
-				function(dishOrder) {
-					fireEvent('onDishOrderPaid', dishOrder);
-				});
+		submitDishOrder('../ordering/payDishOrder', function(dishOrder) {
+			fireEvent('onDishOrderPaid', dishOrder);
+		});
 	};
 
 	this.submitTakeoutOrder = function() {
@@ -653,7 +636,7 @@ function DishOrderManager() {
 					new AlertDialog($.i18n.prop('string_SystemMessage'), $.i18n
 							.prop('string_Error')).show();
 				});
-	}
+	};
 
 	this.reprintCustomerNote = function() {
 
@@ -693,7 +676,7 @@ function DishOrderManager() {
 					new AlertDialog($.i18n.prop('string_SystemMessage'), $.i18n
 							.prop('string_Error')).show();
 				});
-	}
+	};
 
 	this.loadCustomerIfNeeded = function() {
 		dishOrder = _currentDishOrder;
@@ -858,7 +841,7 @@ function DishOrderManager() {
 		if (!checkOrderItemExist(orderItem)) {
 			return;
 		}
-		
+
 		var loadingDialog = new LoadingDialog($.i18n.prop("string_Loading"));
 		loadingDialog.show();
 
@@ -949,7 +932,7 @@ function DishOrderManager() {
 		orderItem.unitExchangeRate = orderItem.orgUnitExchangeRate = 1;
 
 		self.setCurrentDishOrder(_currentDishOrder);
-	}
+	};
 
 	this.setOrderItemDiscountRule = function(orderItem, discountRule) {
 		if (!checkOrderItemExist(orderItem)) {
@@ -1009,7 +992,7 @@ function DishOrderManager() {
 		if (oiIndex > -1) {
 			dishOrder.orderItems.splice(oiIndex, 1);
 		}
-		var newOrderItems = []
+		var newOrderItems = [];
 		for ( var i in dishOrder.orderItems) {
 			var oi = dishOrder.orderItems[i];
 			if (oi.clientTriggerId != null
@@ -1021,7 +1004,7 @@ function DishOrderManager() {
 		dishOrder.orderItems = newOrderItems;
 
 		self.setCurrentDishOrder(dishOrder);
-	}
+	};
 
 	this.changeMealDealItem = function(orderItem, mealDealItem) {
 		if (!checkOrderItemExist(orderItem)) {
@@ -1035,7 +1018,7 @@ function DishOrderManager() {
 		var targetDish = uiDataManager.getDishById(mealDealItem.targetDishId);
 
 		orderItem.departmentId = targetDish.departmentId;
-		orderItem.dishId = targetDish.id
+		orderItem.dishId = targetDish.id;
 		orderItem.dishName = targetDish.name;
 
 		orderItem.mealDealItemId = mealDealItem.id;
@@ -1054,7 +1037,7 @@ function DishOrderManager() {
 
 				self.setCurrentDishOrder(_currentDishOrder);
 		return;
-	}
+	};
 
 	this.addPayRecord = function(payRecord) {
 		var dishOrder = _currentDishOrder;
@@ -1063,12 +1046,12 @@ function DishOrderManager() {
 		}
 
 		if (!dishOrder.payRecords)
-			dishOrder.payRecords = []
+			dishOrder.payRecords = [];
 
 		dishOrder.payRecords.push(payRecord);
 
-		self.setCurrentDishOrder(dishOrder)
-	}
+		self.setCurrentDishOrder(dishOrder);
+	};
 
 	this.removePayRecord = function(payRecord) {
 		var dishOrder = _currentDishOrder;
@@ -1077,7 +1060,7 @@ function DishOrderManager() {
 			dishOrder.payRecords.splice(oiIndex, 1);
 		}
 		self.setCurrentDishOrder(dishOrder);
-	}
+	};
 }
 
 DishOrderManager.getInstance = function() {
