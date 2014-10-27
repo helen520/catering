@@ -541,9 +541,16 @@ function showDishSoldOutDialog(title, message, dishId,
 }
 
 function cancelDishSoldOutCallback(dishId) {
+
+	if (!$storeData.employee.canCancelDishSoldOut && $templeEmployee
+			&& !$templeEmployee.canCancelDishSoldOut) {
+		showAlertDialog($.i18n.prop('string_cuoWu'), "权限不足!无法进行操作!");
+		return;
+	}
+
 	$.ajax({
 		type : 'POST',
-		url : "../admin/cancelDishSoldOut",
+		url : "../admin/editDishSoldOut",
 		data : {
 			dishId : dishId,
 			employeeId : $storeData.employee.id
@@ -556,21 +563,13 @@ function cancelDishSoldOutCallback(dishId) {
 				return;
 			}
 		},
-		success : function(cancelDishSoldOutMsg) {
-			if (cancelDishSoldOutMsg == "quXiaoChengGong") {
-				showAlertDialog($.i18n.prop('string_xiTongTiShi'), $.i18n
-						.prop('string_caoZuoChengGong'));
-				$dishMap[dishId].soldOut = false;
-				renderDishes();
-				if (dishPicker) {
-					dishPicker.refreshUI();
-				}
-			} else if (cancelDishSoldOutMsg == "quanXianBuZu") {
-				showAlertDialog($.i18n.prop('string_xiTongTiShi'), $.i18n
-						.prop('string_quanXianBuZu'));
-			} else {
-				showAlertDialog($.i18n.prop('string_xiTongTiShi'), $.i18n
-						.prop('string_caoZuoShiBai'));
+		success : function(dish) {
+			showAlertDialog($.i18n.prop('string_xiTongTiShi'), $.i18n
+					.prop('string_caoZuoChengGong'));
+			$dishMap[dishId].soldOut = false;
+			renderDishes();
+			if (dishPicker) {
+				dishPicker.refreshUI();
 			}
 		}
 	});
