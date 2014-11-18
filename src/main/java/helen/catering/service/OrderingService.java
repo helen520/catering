@@ -654,16 +654,18 @@ public class OrderingService {
 				.getCustomerNotePrinted());
 		orderItem.setDepartmentId(orderItemToCancel.getDepartmentId());
 		orderItem.setDeskName(orderItemToCancel.getDeskName());
-		if (orderItemToCancel.getDishAlias() != null) {
+
+		if (orderItemToCancel.getDishAlias() != null)
 			orderItem.setDishAlias(orderItemToCancel.getDishAlias());
-		}
+
 		orderItem.setDishId(orderItemToCancel.getDishId());
 		orderItem.setDishName(orderItemToCancel.getDishName());
 		orderItem.setDishPrice(orderItemToCancel.getDishPrice());
 		orderItem.setEditable(false);
-		if (orderItemToCancel.getEmployeeId() != null) {
+
+		if (orderItemToCancel.getEmployeeId() != null)
 			orderItem.setEmployeeId(orderItemToCancel.getEmployeeId());
-		}
+
 		orderItem.setNoCooking(orderItemToCancel.getNoCooking());
 		orderItem.setNoCookingNote(orderItemToCancel.getNoCookingNote());
 		orderItem.setNoCustomerNote(orderItemToCancel.getNoCustomerNote());
@@ -675,6 +677,9 @@ public class OrderingService {
 		orderItem.setUnit(orderItemToCancel.getUnit());
 		orderItem.setOrgUnit(orderItemToCancel.getOrgUnit());
 		orderItem.setHasMealDealItems(orderItemToCancel.getHasMealDealItems());
+
+		if (orderItemToCancel.getMealDealItemId() != null)
+			orderItem.setMealDealItemId(orderItemToCancel.getMealDealItemId());
 
 		return orderItem;
 	}

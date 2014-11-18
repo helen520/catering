@@ -542,8 +542,7 @@ function showDishSoldOutDialog(title, message, dishId,
 
 function cancelDishSoldOutCallback(dishId) {
 
-	if (!$storeData.employee.canCancelDishSoldOut && $templeEmployee
-			&& !$templeEmployee.canCancelDishSoldOut) {
+	if (!$storeData.employee.canCancelDishSoldOut) {
 		showAlertDialog($.i18n.prop('string_cuoWu'), "权限不足!无法进行操作!");
 		return;
 	}

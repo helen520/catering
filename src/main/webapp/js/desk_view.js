@@ -728,31 +728,30 @@ function functionMenuButtonClick() {
 			$.i18n.prop('string_xiaoShouBaoBiao')).appendTo(reportFieldset);
 
 	// 添加报表列表 -->财务报表
-	if ($storeData.employee.job === '店长' || $storeData.employee.job === '收银') {
+	if ($storeData.employee.job == '店长' || $storeData.employee.job == '收银') {
 		$("<a>").css("text-decoration", "none").addClass(
 				"ui-radius ui-shadow functionMenuButton").attr(
 				"href",
 				"../member/memberOperatePage?storeId=" + $storeId
 						+ "&&employeeId=" + $storeData.employee.id).attr(
 				"target", "_blank").text("会员管理页面").appendTo(memberFieldset);
-	}
 
-	if ($storeData.employee.job === '店长') {
-		$("<a>").css("text-decoration", "none").addClass(
-				"ui-radius ui-shadow functionMenuButton").attr(
-				"href",
-				"../member/couponTemplateOperatePage?storeId=" + $storeId
-						+ "&&employeeId=" + $storeData.employee.id).attr(
-				"target", "_blank").text("优惠券管理页面").appendTo(memberFieldset);
+		if ($storeData.employee.job == '店长') {
+			$("<a>").css("text-decoration", "none").addClass(
+					"ui-radius ui-shadow functionMenuButton").attr(
+					"href",
+					"../member/couponTemplateOperatePage?storeId=" + $storeId
+							+ "&&employeeId=" + $storeData.employee.id).attr(
+					"target", "_blank").text("优惠券管理页面")
+					.appendTo(memberFieldset);
 
-		// 菜单编辑页面
-		$("<a>").css("text-decoration", "none").addClass(
-				"ui-radius ui-shadow functionMenuButton").attr("href",
-				"../admin/dishManagementHome?storeId=" + $storeId).attr(
-				"target", "_blank").text("数据管理页面").appendTo(systemFieldset);
-	}
+			// 菜单编辑页面
+			$("<a>").css("text-decoration", "none").addClass(
+					"ui-radius ui-shadow functionMenuButton").attr("href",
+					"../admin/dishManagementHome?storeId=" + $storeId).attr(
+					"target", "_blank").text("数据管理页面").appendTo(systemFieldset);
+		}
 
-	if ($storeData.employee.job === '收银' || $storeData.employee.job === '店长') {
 		var shiftClassButton = $("<div>").addClass(
 				"ui-radius ui-shadow functionMenuButton").text(
 				$.i18n.prop('string_jiaoBan')).appendTo(systemFieldset);

@@ -8,7 +8,7 @@
 	<http auto-config="true">
 		<intercept-url pattern="/admin/cancelDishSoldOut"
 			access="ROLE_USER,ROLE_ADMIN" />
-		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
+		<intercept-url pattern="/admin/**" access="ROLE_ADMIN,ROLE_USER" />
 		<intercept-url pattern="/reporting/**" access="ROLE_ADMIN" />
 		<intercept-url pattern="/ordering/shiftClass" access="ROLE_ADMIN" />
 		<intercept-url pattern="/ordering/payDishOrder" access="ROLE_ADMIN" />

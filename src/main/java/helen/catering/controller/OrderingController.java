@@ -161,7 +161,6 @@ public class OrderingController {
 
 	@ResponseBody
 	@RequestMapping("cancelOrderItem")
-	@Secured("ROLE_ADMIN")
 	public DishOrder cancelOrderItem(@RequestParam long employeeId,
 			@RequestParam long dishOrderId, @RequestParam long orderItemId,
 			@RequestParam double amount, @RequestParam String cancelReason,
