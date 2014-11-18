@@ -291,7 +291,7 @@
 		<profile>
 			<id>test</id>
 			<properties>
-				<db.url>jdbc:mysql://www.sunwayyachts.com:3306/catering_db</db.url>
+				<db.url>jdbc:mysql://localhost:3306/catering_db</db.url>
 				<db.password>helen520</db.password>
 				<db.username>root</db.username>
 				<db.com>19889</db.com>
