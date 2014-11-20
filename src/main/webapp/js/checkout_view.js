@@ -585,7 +585,7 @@ function showSearchMemberDialog() {
 			type : 'POST',
 			url : '../member/getMemberListByPhoneOrCardNo',
 			data : {
-				submitStr : submitStr,
+				keyword : submitStr,
 				storeId : $storeId
 			},
 			dataType : 'json',
