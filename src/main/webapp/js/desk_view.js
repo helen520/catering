@@ -674,11 +674,9 @@ function functionMenuButtonClick() {
 			"ui-radius ui-shadow functionMenuButton").text("店内订单").appendTo(
 			dishOrderFieldset);
 	var bookingDishOrderListButton = $("<div>").addClass(
-			"ui-radius ui-shadow functionMenuButton").text("自助订单列表").appendTo(
-			dishOrderFieldset);
+			"ui-radius ui-shadow functionMenuButton").text("自助订单列表");
 	var bookRecordListButton = $("<div>").addClass(
-			"ui-radius ui-shadow functionMenuButton").text("预订记录列表").appendTo(
-			dishOrderFieldset);
+			"ui-radius ui-shadow functionMenuButton").text("预订记录列表");
 
 	var memberFieldset = $("<fieldset>").attr("id", "reportPanel").css(
 			"margin-bottom", "1em").appendTo(functionMenuButtonSelector);

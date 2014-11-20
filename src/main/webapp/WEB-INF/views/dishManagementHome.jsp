@@ -23,8 +23,6 @@
 		<button id="desks" class="menuButton">餐台</button>
 		<button id="posPrinters" class="menuButton">打印机</button>
 		<button id="departments" class="menuButton">部门</button>
-		<button id="bookingTimeRanges" class="menuButton">预定时间</button>
-		<button id="roomResources" class="menuButton">预定房间种类</button>
 		<button id="paymentTypes" class="menuButton">付款方式</button>
 		<button id="serviceFeeRates" class="menuButton">服务费率</button>
 		<button id="discountRates" class="menuButton">折扣率</button>
