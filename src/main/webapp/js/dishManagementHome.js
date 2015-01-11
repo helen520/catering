@@ -1458,7 +1458,7 @@ function addDish() {
 	form.departmentId.value = $departments != null && $departments.length > 0 ? $departments[0].id
 			: "";
 
-	$("#uploadifyDiv").show();
+	//$("#uploadifyDiv").show();
 }
 function editMealDealItemInit() {
 	editMealDealItem("add");
@@ -1489,7 +1489,7 @@ function editMealDealItem(type) {
 
 	}
 
-	$("#uploadifyDiv").show();
+	//$("#uploadifyDiv").show();
 }
 
 function addMealDealItemOnclick() {
@@ -2031,7 +2031,7 @@ function editDish(dishCategoryId, dish) {
 	form.needWeigh.checked = dish.needWeigh;
 	form.hasMealDealItems.checked = dish.hasMealDealItems;
 
-	$("#uploadifyDiv").show();
+	//$("#uploadifyDiv").show();
 	renderDishBOMLines();
 }
 

@@ -595,10 +595,10 @@
 					<li><input name="id" type="hidden" value="" /></li>
 					<li><input name="showDishPicPath" type="hidden" value="" /></li>
 				</ul>
-				<div class="image">
+				<div class="image" style="display: none;">
 					<img alt="菜品图片" style="width: 10em;" name="secondPicPath" src="">
 				</div>
-				<div style="color: red; padding: .2em">&nbsp;&nbsp;&nbsp;图片最大不超过2M,选择完图片后要点击下面的确定按钮才会保存图片!</div>
+				<div style="color: red; padding: .2em; display: none;">&nbsp;&nbsp;&nbsp;图片最大不超过2M,选择完图片后要点击下面的确定按钮才会保存图片!</div>
 				<div class="new-line">
 					菜名 <input name="name"
 						class="ui-input ui-radius ui-shadow ui-border-solid" type="text"
