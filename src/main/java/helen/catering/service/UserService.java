@@ -140,6 +140,10 @@ public class UserService {
 		return _userDao.getMemberListByPhoneOrCardNo(submitStr, storeId);
 	}
 
+	public List<UserAccount> getAllMemberListByPhoneOrCardNo(long storeId) {
+		return _userDao.getAllMemberListByPhoneOrCardNo(storeId);
+	}
+
 	public UserAccount getMemberById(long userAccountId) {
 		return _userDao.getMemberById(userAccountId);
 	}

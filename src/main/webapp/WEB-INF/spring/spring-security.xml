@@ -16,7 +16,7 @@
 		<intercept-url pattern="/storeData/**" access="ROLE_USER,ROLE_ADMIN" />
 		<intercept-url pattern="/desktop/**" access="ROLE_USER,ROLE_ADMIN" />
 		<intercept-url pattern="/store/**" access="ROLE_USER,ROLE_ADMIN" />
-		<form-login login-page="/login" default-target-url="/chooseType"
+		<form-login login-page="/login" default-target-url="/loginAutoChooseType"
 			authentication-failure-url="/loginfailed" />
 		<logout logout-success-url="/logout" />
 	</http>

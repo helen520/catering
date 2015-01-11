@@ -163,6 +163,22 @@ public class UserAccountDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<UserAccount> getAllMemberListByPhoneOrCardNo(long storeId) {
+
+		List<UserAccount> userAccounts = this.entityManager
+				.createQuery(
+						"select u from UserAccount u where u.memberCardNo is not null and u.mobileNo is not null and u.storeId = ?")
+				.setParameter(1, storeId).getResultList();
+
+		for (UserAccount user : userAccounts) {
+			List<Coupon> coupons = this.getCouponsByUserIdAndStoreId(
+					user.getId(), storeId);
+			user.setCoupons(coupons);
+		}
+		return userAccounts;
+	}
+
 	@Transactional
 	public boolean modifyUserPassword(String userName, String oldPassword,
 			String newPassword) {

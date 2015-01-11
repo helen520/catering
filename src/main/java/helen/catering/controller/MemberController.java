@@ -578,6 +578,9 @@ public class MemberController {
 		if (keyword == "") {
 			return userAccounts;
 		}
+		if (keyword.endsWith("all")) {
+			return _userService.getAllMemberListByPhoneOrCardNo(storeId);
+		}
 
 		userAccounts = _userService.getMemberListByPhoneOrCardNo(keyword,
 				storeId);

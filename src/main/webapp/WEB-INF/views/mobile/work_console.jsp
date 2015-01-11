@@ -41,7 +41,6 @@
 	<script type="text/javascript"
 		src="../js/vendor/jquery.i18n.properties-1.0.9.js"></script>
 
-	<script type="text/javascript" src="../js/vendor/Calendar3.js"></script>
 	<script type="text/javascript" src="../js/jquery.modal.js"></script>
 	<script type="text/javascript" src="../js/jquery.digitKb.js"></script>
 	<script type="text/javascript" src="../js/vendor/fastclick.js"></script>
@@ -72,5 +71,6 @@
 		charset="utf-8"></script>
 	<script type="text/javascript" src="../js/mobile/dish_order_view.js"
 		charset="utf-8"></script>
+
 </body>
 </html>

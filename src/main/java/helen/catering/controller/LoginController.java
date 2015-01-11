@@ -100,6 +100,11 @@ public class LoginController {
 		return mav;
 	}
 
+	@RequestMapping(value = "loginAutoChooseType")
+	public String loginAutoChooseType(ModelMap model) {
+		return "loginAutoChooseType";
+	}
+
 	@RequestMapping(value = "modifyPassword")
 	public String modifyPassword(ModelMap model) {
 		return "modifyPassword";

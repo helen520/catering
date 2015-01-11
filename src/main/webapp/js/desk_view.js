@@ -121,6 +121,7 @@ function updateDeskPanel() {
 	$("#customerCountLabel").text("");
 	$("#totalPriceLabel").text("");
 	$("#dishOrderCreateTimeLabel").hide();
+	$("#customerCountLabel").hide();
 	$("#dishOrderCreateTime").text("");
 	$("#orderItemListDiv").empty().append($(loadingHtml.toString()));
 
@@ -131,6 +132,7 @@ function updateDeskPanel() {
 		showCurDishOrder();
 		return;
 	}
+	$("#customerCountLabel").show();
 
 	var dishOrderId = orderBrief.dishOrderId;
 	var needGetFromServer = false;
